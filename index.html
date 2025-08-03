@@ -47,58 +47,115 @@
     #videoSection {display:none; text-align:center; margin:30px auto;}
     #videoPlaceholder { width:340px; height:190px; border-radius:13px; background:#f7aef8; display:flex; align-items:center; justify-content:center; color:#a844a2; font-size:1.15rem; margin:0 auto;}
 
-    /* Slideshow container and style */
-    .slideshow-container {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      width: 100%;
-      height: 100%;
-      background: #131128;
+    /* ==== New dissolving image slideshow styles for carouselWrap ==== */
+    #carouselWrap {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100vw;
+      justify-content: flex-start;
+      background: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    .sliding-slideshow {
+      position: relative;
+      width: 97vw;
+      height: 52vw;
+      max-width: 500px;
+      max-height: 340px;
+      min-height: 180px;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1000;
       overflow: hidden;
+      background: #161545;
+      border-radius: 18px;
+      box-shadow: 0 8px 36px rgba(44,22,127,0.10);
     }
-    .slide-image {
+    .slide-img {
       position: absolute;
       top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
+      width: 100%; height: 100%;
       object-fit: cover;
       opacity: 0;
-      z-index: 2;
       pointer-events: none;
-      will-change: opacity, transform, filter;
-      transition: opacity 1.15s cubic-bezier(.8,.2,.2,.9);
-      filter: blur(1px) saturate(0.9);
+      transition: opacity 1.13s cubic-bezier(.48,.24,.32,.86), filter 1.13s, transform 1.35s;
+      filter: blur(1.2px) saturate(0.93);
+      z-index: 1;
     }
-    .slide-image.active {
+    .slide-img.active {
       opacity: 1;
-      z-index: 3;
-      transition: opacity 1.15s, filter 1.15s, transform 0.5s;
-      filter: blur(0) saturate(1.1);
-      animation: img-pop-in 1.3s cubic-bezier(.51,.01,.65,.92);
-      pointer-events: auto;
+      filter: blur(0) saturate(1.09);
+      z-index: 10;
+      animation: img-pop-in 1.2s cubic-bezier(.44,0,.67,1);
     }
     @keyframes img-pop-in {
-      0%   {opacity: 0; transform: scale(1.07) rotate(-1deg);}
-      25%  {opacity: 1; transform: scale(1.02) rotate(2deg);}
-      55%  {transform: scale(1.01);}
-      100% {opacity: 1; transform: scale(1) rotate(0);}
+      0% { opacity:0; transform: scale(1.08) rotate(-1.5deg);}
+      28%{ opacity:1; transform: scale(1.03);}
+      100%{opacity:1; transform: scale(1);}
     }
-    /* Optional overlay for visual depth */
-    .img-overlay {
-      position: absolute; top:0; left:0; width:100vw; height:100vh;
-      pointer-events: none;
-      background: linear-gradient(180deg,rgba(32,5,67,0.2) 70%,rgba(19,17,40,0.86) 100%);
-      z-index: 9;
-      mix-blend-mode: multiply;
-    }
-    /* Prevent scrolling or selection on mobile */
-    html, body, .slideshow-container {
-      touch-action: none;
+    /* Birthday animation and quote */
+    #birthdayAnimation {
+      width: 100vw;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
       user-select: none;
+    }
+    .crazy-birthday {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.65rem;
+      font-weight: 900;
+      background: linear-gradient(90deg,#FFD166,#EF476F,#06D6A0,#118AB2);
+      color: #fff;
+      padding: 8px 40px 8px 28px;
+      border-radius: 24px;
+      animation: wiggle 1.5s infinite, color-cycle 2.6s infinite alternate;
+      box-shadow: 0 5px 15px #e9baff67;
+      letter-spacing: 1.3px;
+      display: inline-block;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 12px #E0AAFF;
+    }
+    @keyframes wiggle {
+      0% { transform: rotate(-5deg) scale(1);}
+      12% { transform: rotate(2.2deg) scale(1.08);}
+      19% { transform: rotate(-3deg) scale(1.04);}
+      30% { transform: rotate(1.4deg) scale(1.12);}
+      42% { transform: rotate(-1deg) scale(1.08);}
+      58% { transform: rotate(0.8deg) scale(1.1);}
+      74% { transform: rotate(-3deg) scale(1.02);}
+      84% { transform: rotate(2deg) scale(1.1);}
+      92% { transform: rotate(-1deg) scale(1.04);}
+      100% {transform: rotate(-5deg) scale(1);}
+    }
+    @keyframes color-cycle {
+      0% { filter: hue-rotate(0deg);}
+      100% { filter: hue-rotate(340deg);}
+    }
+    @media (max-width:900px){
+      .crazy-birthday { font-size: 1.2rem; padding:7px 16px;}
+    }
+    .bday-quote {
+      font-family: 'Segoe UI', cursive, sans-serif;
+      margin-top: 8px;
+      font-size: 1.20rem;
+      color: #7a37ad;
+      opacity: 0.93;
+      padding-left: 13px;
+      padding-right: 13px;
+      max-width: 410px;
+      text-align: center;
+      font-style: italic;
+      letter-spacing: 0.04em;
+    }
+    .fadeUp {
+      animation: fadeUpShow 1.5s;
+    }
+    @keyframes fadeUpShow {
+      0% { opacity: 0; transform: translateY(24px);}
+      100% { opacity: 0.93; transform: translateY(0);}
     }
 
     .final-msg { display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto; text-align: center; font-weight: bold; background: rgba(255,255,255,0.74); border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem; box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;}
@@ -160,21 +217,28 @@
 
     <div class="itsYou-wrap" id="youAnim"></div>
 
-    <div class="slideshow-container" id="slideshow">
-      <!-- Replace these src= links with your actual URLs or local paths (hosted images) -->
-      <img src="panda-images/panda1.jpeg" class="slide-image active" alt="panda1" />
-      <img src="panda-images/panda2.jpeg" class="slide-image" alt="panda2" />
-      <img src="panda-images/panda3.jpeg" class="slide-image" alt="panda3" />
-      <img src="panda-images/panda4.jpg" class="slide-image" alt="panda4" />
-      <img src="panda-images/panda5.jpg" class="slide-image" alt="panda5" />
-      <img src="panda-images/panda6.jpg" class="slide-image" alt="panda6" />
-      <img src="panda-images/panda7.jpg" class="slide-image" alt="panda7" />
-      <img src="panda-images/panda10.jpg" class="slide-image" alt="panda10" />
-      <img src="panda-images/panda11.jpg" class="slide-image" alt="panda11" />
-      <img src="panda-images/panda12.jpg" class="slide-image" alt="panda12" />
-      <img src="panda-images/panda13.jpeg" class="slide-image" alt="panda13" />
-      <img src="panda-images/panda14.jpeg" class="slide-image" alt="panda14" />
-      <div class="img-overlay"></div>
+    <!-- SWITCHED: Carousel replaced with dissolve/fade slideshow in this in-page section -->
+    <div id="carouselWrap">
+      <div class="sliding-slideshow" id="slidingSlideshow">
+        <img src="panda-images/panda1.jpeg" class="slide-img active" />
+        <img src="panda-images/panda2.jpeg" class="slide-img" />
+        <img src="panda-images/panda3.jpeg" class="slide-img" />
+        <img src="panda-images/panda4.jpg" class="slide-img" />
+        <img src="panda-images/panda5.jpg" class="slide-img" />
+        <img src="panda-images/panda6.jpg" class="slide-img" />
+        <img src="panda-images/panda7.jpg" class="slide-img" />
+        <img src="panda-images/panda10.jpg" class="slide-img" />
+        <img src="panda-images/panda11.jpg" class="slide-img" />
+        <img src="panda-images/panda12.jpg" class="slide-img" />
+        <img src="panda-images/panda13.jpeg" class="slide-img" />
+        <img src="panda-images/panda14.jpeg" class="slide-img" />
+      </div>
+      <div id="birthdayAnimation" style="margin-top:25px;">
+        <div class="crazy-birthday bounce-crazy">
+          🥳 <span>Happy <span style="color:#EF476F; letter-spacing:2px;">Birthday</span> Panda!</span> 🎉
+        </div>
+        <div class="bday-quote fadeUp">A year older, a hundred times cuter! 🐼💗</div>
+      </div>
     </div>
   </div>
 
@@ -361,46 +425,33 @@
       });
       setTimeout(()=>{
         youAnim.style.display='none';
-        startSlideshow();
+        showCarousel();
       },4000);
     }
 
-    // Slideshow code for the dissolve fade animation of images for 12 seconds
-    function startSlideshow() {
-      const DURATION = 2200;   // Each image visible for approx 2.2 sec
-      const TOTAL_TIME = 12000; // 12 seconds total
-      const images = document.querySelectorAll('.slide-image');
-      let current = 0;
-      let elapsed = 0;
-
-      function showNextImage(){
-        images[current].classList.remove('active');
-        current = (current + 1) % images.length;
-        images[current].classList.add('active');
-      }
-
-      images.forEach((img,i) => { if(i!==0) img.classList.remove('active'); });
-
+    // === SHOW DISSOLVE SLIDESHOW IN-CAROUSEL AREA ===
+    function showCarousel() {
+      const wrap = document.getElementById("carouselWrap");
+      const slides = document.querySelectorAll('#slidingSlideshow .slide-img');
+      let idx = 0;
+      wrap.style.display = "flex";
+      slides.forEach((img, i) => img.classList.toggle('active', i===0));
+      let elapsed = 0, DURATION = 2200, TOTAL = 12000;
       let interval = setInterval(() => {
-        showNextImage();
+        slides[idx].classList.remove('active');
+        idx = (idx + 1) % slides.length;
+        slides[idx].classList.add('active');
         elapsed += DURATION;
-        if (elapsed >= TOTAL_TIME) {
+        if(elapsed >= TOTAL) {
           clearInterval(interval);
-          // fade out slideshow container and show final message
-          const slideshow = document.getElementById('slideshow');
-          slideshow.style.transition = "opacity 1s ease";
-          slideshow.style.opacity = 0;
+          wrap.style.transition = "opacity 1s";
+          wrap.style.opacity = 0;
           setTimeout(() => {
-            slideshow.style.display = 'none';
+            wrap.style.display = 'none';
             document.getElementById('finalMsg').style.display = 'block';
-          }, 1100);
+          }, 1050);
         }
       }, DURATION);
-
-      // (Optional) allow skip next images on click/tap
-      document.getElementById('slideshow').onclick = () => {
-        showNextImage();
-      };
     }
   </script>
 </body>
