@@ -47,55 +47,79 @@
     #videoSection {display:none; text-align:center; margin:30px auto;}
     #videoPlaceholder { width:340px; height:190px; border-radius:13px; background:#f7aef8; display:flex; align-items:center; justify-content:center; color:#a844a2; font-size:1.15rem; margin:0 auto;}
 
-    /* ==== New dissolving image slideshow styles for carouselWrap ==== */
+    /* Coverflow carousel and birthday animation styles */
     #carouselWrap {
       display: none;
       flex-direction: column;
+      justify-content: flex-start;
       align-items: center;
       width: 100vw;
-      justify-content: flex-start;
+      height: 480px;
       background: none;
+      perspective: 1200px;
       margin-bottom: 0;
       padding-bottom: 0;
     }
-    .sliding-slideshow {
-      position: relative;
-      width: 97vw;
-      height: 52vw;
-      max-width: 500px;
-      max-height: 340px;
-      min-height: 180px;
+    .coverflow-carousel {
       display: flex;
-      justify-content: center;
       align-items: center;
-      overflow: hidden;
-      background: #161545;
+      justify-content: center;
+      width: 930px;
+      height: 360px;
+      position: relative;
+      gap: 0;
+      transition: all 0.5s;
+      margin-bottom: 0;
+    }
+    .carousel-img {
+      width: 320px;
+      height: 340px;
       border-radius: 18px;
-      box-shadow: 0 8px 36px rgba(44,22,127,0.10);
-    }
-    .slide-img {
-      position: absolute;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
       object-fit: cover;
+      box-shadow: 0 6px 36px rgba(92, 43, 226, 0.17);
+      position: absolute;
+      top: 10px;
+      left: 50%;
       opacity: 0;
-      pointer-events: none;
-      transition: opacity 1.13s cubic-bezier(.48,.24,.32,.86), filter 1.13s, transform 1.35s;
-      filter: blur(1.2px) saturate(0.93);
+      cursor: pointer;
+      transition:
+        opacity 0.45s,
+        box-shadow 0.41s,
+        transform 0.62s cubic-bezier(.43,0,.18,1);
+      will-change: transform, opacity;
       z-index: 1;
+      pointer-events: none;
     }
-    .slide-img.active {
+    .carousel-img.active {
       opacity: 1;
-      filter: blur(0) saturate(1.09);
-      z-index: 10;
-      animation: img-pop-in 1.2s cubic-bezier(.44,0,.67,1);
+      box-shadow: 0 7px 40px 2px #dad8fc, 0 12px 60px #bf98dd44;
+      transform: translateX(-50%) scale(1.15) rotateY(0deg);
+      z-index: 30;
+      pointer-events: auto;
     }
-    @keyframes img-pop-in {
-      0% { opacity:0; transform: scale(1.08) rotate(-1.5deg);}
-      28%{ opacity:1; transform: scale(1.03);}
-      100%{opacity:1; transform: scale(1);}
+    .carousel-img.left, .carousel-img.right {
+      opacity: 1;
+      z-index: 18;
+      pointer-events: auto;
     }
-    /* Birthday animation and quote */
+    .carousel-img.left {
+      transform: translateX(-200%) scale(0.95) rotateY(32deg);
+      filter: brightness(0.98) blur(1px);
+    }
+    .carousel-img.right {
+      transform: translateX(100%) scale(0.93) rotateY(-32deg);
+      filter: brightness(0.95) blur(1.2px);
+    }
+    .carousel-img.far-left {
+      transform: translateX(-380%) scale(0.78) rotateY(55deg);
+      opacity: 0.34;
+      z-index: 13;
+    }
+    .carousel-img.far-right {
+      transform: translateX(230%) scale(0.75) rotateY(-55deg);
+      opacity: 0.30;
+      z-index: 13;
+    }
     #birthdayAnimation {
       width: 100vw;
       display: flex;
@@ -157,7 +181,11 @@
       0% { opacity: 0; transform: translateY(24px);}
       100% { opacity: 0.93; transform: translateY(0);}
     }
-
+    @media (max-width: 900px) {
+      #carouselWrap { height: 220px;}
+      .coverflow-carousel { width: 95vw; height:170px;}
+      .carousel-img { width: 130px; height: 140px;}
+    }
     .final-msg { display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto; text-align: center; font-weight: bold; background: rgba(255,255,255,0.74); border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem; box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;}
     .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px;}
     .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97; }
@@ -173,7 +201,7 @@
 <body>
   <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
   <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
-
+  
   <div id="step1" class="section active">
     <div class="login-container">
       <div class="input-row">
@@ -202,36 +230,35 @@
       <div class="typing-area" id="typingArea" style="display:none;"></div>
       <div class="fade-message" id="aug8Best" style="display:none;">Do You Know What's the greatest things happened on August 8? </div>
     </div>
-
+    
     <div id="searchSection">
       <form id="googleForm" class="search-box" onsubmit="return false;">
         <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="23" style="margin-right:7px;" />
-        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google"/>
+        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google">
         <button class="search-btn" id="searchBtn">Google Search</button>
       </form>
     </div>
-
+    
     <div id="videoSection">
       <div id="videoPlaceholder">[ 3-sec Surprise Video Here Soon! ]</div>
     </div>
-
+    
     <div class="itsYou-wrap" id="youAnim"></div>
-
-    <!-- SWITCHED: Carousel replaced with dissolve/fade slideshow in this in-page section -->
+    
     <div id="carouselWrap">
-      <div class="sliding-slideshow" id="slidingSlideshow">
-        <img src="panda-images/panda1.jpeg" class="slide-img active" />
-        <img src="panda-images/panda2.jpeg" class="slide-img" />
-        <img src="panda-images/panda3.jpeg" class="slide-img" />
-        <img src="panda-images/panda4.jpg" class="slide-img" />
-        <img src="panda-images/panda5.jpg" class="slide-img" />
-        <img src="panda-images/panda6.jpg" class="slide-img" />
-        <img src="panda-images/panda7.jpg" class="slide-img" />
-        <img src="panda-images/panda10.jpg" class="slide-img" />
-        <img src="panda-images/panda11.jpg" class="slide-img" />
-        <img src="panda-images/panda12.jpg" class="slide-img" />
-        <img src="panda-images/panda13.jpeg" class="slide-img" />
-        <img src="panda-images/panda14.jpeg" class="slide-img" />
+      <div class="coverflow-carousel" id="coverflowCarousel">
+<img src="panda-images/panda1.jpeg" class="carousel-img" />
+<img src="panda-images/panda2.jpeg" class="carousel-img" />
+<img src="panda-images/panda3.jpeg" class="carousel-img" />
+<img src="panda-images/panda4.jpg" class="carousel-img" />
+<img src="panda-images/panda5.jpg" class="carousel-img" />
+<img src="panda-images/panda6.jpg" class="carousel-img" />
+<img src="panda-images/panda7.jpg" class="carousel-img" />
+<img src="panda-images/panda10.jpg" class="carousel-img" />
+<img src="panda-images/panda11.jpg" class="carousel-img" />
+<img src="panda-images/panda12.jpg" class="carousel-img" />
+<img src="panda-images/panda13.jpeg" class="carousel-img" />
+<img src="panda-images/panda14.jpeg" class="carousel-img" />
       </div>
       <div id="birthdayAnimation" style="margin-top:25px;">
         <div class="crazy-birthday bounce-crazy">
@@ -429,30 +456,66 @@
       },4000);
     }
 
-    // === SHOW DISSOLVE SLIDESHOW IN-CAROUSEL AREA ===
+    // --- 3D Coverflow Carousel with Birthday Animation for 15s ---
     function showCarousel() {
       const wrap = document.getElementById("carouselWrap");
-      const slides = document.querySelectorAll('#slidingSlideshow .slide-img');
-      let idx = 0;
+      const carousel = document.getElementById("coverflowCarousel");
+      const images = carousel.querySelectorAll(".carousel-img");
+      let idx = Math.floor(images.length / 2);
       wrap.style.display = "flex";
-      slides.forEach((img, i) => img.classList.toggle('active', i===0));
-      let elapsed = 0, DURATION = 2200, TOTAL = 12000;
-      let interval = setInterval(() => {
-        slides[idx].classList.remove('active');
-        idx = (idx + 1) % slides.length;
-        slides[idx].classList.add('active');
-        elapsed += DURATION;
-        if(elapsed >= TOTAL) {
-          clearInterval(interval);
-          wrap.style.transition = "opacity 1s";
-          wrap.style.opacity = 0;
-          setTimeout(() => {
-            wrap.style.display = 'none';
-            document.getElementById('finalMsg').style.display = 'block';
-          }, 1050);
-        }
-      }, DURATION);
+
+      function updateCarousel() {
+        images.forEach((img, i) => {
+          img.classList.remove("active", "left", "right", "far-left", "far-right");
+          if (i === idx) {
+            img.classList.add("active");
+          } else if (i === idx - 1) {
+            img.classList.add("left");
+          } else if (i === idx + 1) {
+            img.classList.add("right");
+          } else if (i === idx - 2) {
+            img.classList.add("far-left");
+          } else if (i === idx + 2) {
+            img.classList.add("far-right");
+          }
+        });
+      }
+      updateCarousel();
+
+      function next() {
+        idx = (idx + 1) % images.length;
+        updateCarousel();
+      }
+      function prev() {
+        idx = (idx - 1 + images.length) % images.length;
+        updateCarousel();
+      }
+      // Auto-slide every 2.2s, looped for 15 seconds
+      let autoSlide = setInterval(next, 2200);
+
+      images.forEach((img, i) => {
+        img.onclick = () => {
+          idx = i;
+          updateCarousel();
+          clearInterval(autoSlide);
+          autoSlide = setInterval(next, 2200);
+        };
+      });
+
+      wrap.addEventListener('click', e => {
+        if (e.clientX < window.innerWidth / 2) prev();
+        else next();
+        clearInterval(autoSlide);
+        autoSlide = setInterval(next, 2200);
+      });
+
+      setTimeout(() => {
+        clearInterval(autoSlide);
+        wrap.style.display = "none";
+        document.getElementById('finalMsg').style.display = 'block';
+      }, 15000); // 15 seconds
     }
   </script>
 </body>
 </html>
+
