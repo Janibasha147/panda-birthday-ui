@@ -20,9 +20,27 @@
     }
     .section { display: none; }
     .section.active { display: block; }
-    /* Original login / UI styles omitted for brevity: use as before */
 
-    /* === Falling Birthday Animation Section === */
+    /* Floating hearts and balloons */
+    .floating {
+      position: fixed;
+      bottom: -40px;
+      font-size: 2.3rem;
+      animation: floatUp 6.5s linear infinite;
+      z-index: 40;
+      user-select: none;
+      pointer-events: none;
+      opacity: 0.61;
+      left: 0;
+    }
+    @keyframes floatUp {
+      0% { transform: translateY(0) scale(1);}
+      83% { opacity: 0.81; }
+      100% { transform: translateY(-110vh) scale(1.20); opacity: 0.17;}
+    }
+    .floating-paused { display: none !important; }
+
+    /* Falling Birthday Animation Section */
     #fallingBirthdaySection {
       position: fixed;
       left: 0; top: 0; width: 100vw; height: 100vh;
@@ -42,14 +60,14 @@
     }
     .falling-img {
       position: absolute;
-      width: 92px;
-      height: 92px;
+      width: 90px;
+      height: 90px;
       max-width: 20vw;
       max-height: 20vw;
       object-fit: cover;
       border-radius: 16px;
       box-shadow: 0 3px 16px #e0bbec44;
-      animation: fall 14s linear infinite;
+      animation: fall 12s linear infinite;
       will-change: transform, opacity;
       user-select: none;
       pointer-events: none;
@@ -59,13 +77,14 @@
       95%{ opacity: 1;}
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0;}
     }
+
     .birthday-message {
       position: absolute;
       top: 52%; left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
       z-index: 10;
-      animation: fadeIn 2s cubic-bezier(.52,0,.44,1) .2s forwards;
+      animation: fadeIn 1.2s cubic-bezier(.52,0,.44,1) .2s forwards;
       opacity: 0;
       max-width: 93vw;
       user-select: none;
@@ -73,17 +92,17 @@
     }
     .birthday-message h1 {
       font-family: 'Pacifico', cursive;
-      font-size: 2.7em;
+      font-size: 2.2em;
       color: #ff4081;
-      margin-bottom: 0.5em;
+      margin-bottom: 0.45em;
       text-shadow: 2px 2px #fff6fc, 0 9px 25px #f7aef8aa;
       letter-spacing: 2px;
-      animation: wiggle 1.6s infinite;
+      animation: wiggle 1.5s infinite;
     }
     .birthday-message p {
       font-size: 1.18em;
       color: #555;
-      background: rgba(255,255,255,0.73);
+      background: rgba(255,255,255,0.85);
       padding: 6px 18px;
       border-radius: 9px;
       display: inline-block;
@@ -93,24 +112,19 @@
       box-shadow: 0 2px 12px #fff9;
     }
     @keyframes wiggle {
-      0% { transform:translateY(0) scale(1) rotate(-3.5deg);}
-      15% { transform:scale(1.06) rotate(2.1deg);}
-      27% { transform:scale(1.02) rotate(-1.5deg);}
-      40% { transform:scale(1.07) rotate(1.7deg);}
-      60% { transform:scale(1.03) rotate(-2.4deg);}
-      80% { transform:scale(1.06) rotate(2deg);}
-      100% { transform:translateY(0) scale(1) rotate(-3.5deg);}
+      0% { transform:translateY(0) scale(1) rotate(-2deg);}
+      15% { transform:scale(1.03) rotate(1.1deg);}
+      40% { transform:scale(1.06) rotate(-1.7deg);}
+      60% { transform:scale(1.03) rotate(2.2deg);}
+      100% { transform:translateY(0) scale(1) rotate(-2deg);}
     }
     @keyframes fadeIn { to { opacity: 1;} }
     @media (max-width:700px) {
-      .falling-img { width: 58px; height: 58px; max-width: 28vw; max-height: 28vw;}
-      .birthday-message h1 { font-size: 1.25em; }
+      .falling-img { width: 52px; height: 52px; max-width: 30vw; max-height: 30vw;}
+      .birthday-message h1 { font-size: 1.2em; }
       .birthday-message p { font-size: 1em;}
     }
-    /* Hide old balloons/hearts only when this animation is shown */
-    .floating { display: none!important; }
 
-    /* Final message ... */
     .final-msg {
       display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto;
       text-align: center; font-weight: bold; background: rgba(255,255,255,0.74);
@@ -125,8 +139,10 @@
   <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
   <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
 
+  <!-- Floating emojis (always present in DOM, toggle visibility via .floating-paused class) -->
+  <div id="emojiFloatLayer"></div>
+
   <div id="step1" class="section active">
-    <!-- ... your login and welcome screen as before ... -->
     <div class="login-container">
       <div class="input-row">
         <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
@@ -144,7 +160,6 @@
   </div>
 
   <div id="step2" class="section">
-    <!-- ...rest of your interactive flow, same as before ... -->
     <div class="centered">
       <div class="main-msg" id="mainMsg">Do You Know What's the greatest things happened on August 8? </div>
       <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px;">
@@ -163,17 +178,15 @@
         <button class="search-btn" id="searchBtn">Google Search</button>
       </form>
     </div>
-    <div id="videoSection">
-      <div id="videoPlaceholder">[ 3-sec Surprise Video Here Soon! ]</div>
-    </div>
+
     <div class="itsYou-wrap" id="youAnim"></div>
 
-    <!-- === Added Birthday Animation Section === -->
+    <!-- Falling images + message + quote (for 12s after "It's YOU") -->
     <div id="fallingBirthdaySection">
       <div class="falling-container" id="fallingContainer"></div>
       <div class="birthday-message" id="fallingBirthdayMessage">
         <h1>Happy Birthday Panda!</h1>
-        <p>Wishing you a day full of sweet surprises and joy! 🎉🎈</p>
+        <p>A year older, a hundred times cuter! 🐼💗</p>
       </div>
     </div>
   </div>
@@ -184,7 +197,40 @@
   </div>
 
   <script>
-    // ==== Login / welcome logic ====
+    // ==== Floating emojis everywhere except images-falling ====
+    const emojiFloatLayer = document.getElementById('emojiFloatLayer');
+    const emojis = ["❤️","🎈"];
+    let floatInterval = null;
+    function startFloatingEmojis(){
+      if(floatInterval) return; // Already running
+      floatInterval = setInterval(()=>{
+        createFloatEmoji();
+      }, 600);
+    }
+    function stopFloatingEmojis(){
+      clearInterval(floatInterval);
+      floatInterval = null;
+      // Hide all floating emojis instantly
+      document.querySelectorAll('.floating').forEach(f=>f.classList.add('floating-paused'));
+    }
+    function resumeFloatingEmojis(){
+      document.querySelectorAll('.floating').forEach(f=>f.classList.remove('floating-paused'));
+      startFloatingEmojis();
+    }
+
+    function createFloatEmoji(){
+      const f = document.createElement('div');
+      f.className = 'floating';
+      f.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+      f.style.left = Math.floor(Math.random()*92) + 'vw';
+      f.style.fontSize = (2 + Math.random()*2.1) + 'rem';
+      f.style.animationDuration = (5 + Math.random()*3.2) + 's';
+      emojiFloatLayer.appendChild(f);
+      setTimeout(()=>{ if(f && f.parentNode) f.remove(); }, 9000);
+    }
+    startFloatingEmojis();
+
+    // ==== Login/flow logic (unchanged except new emoji logic) ====
     const btn = document.getElementById('enterBtn');
     const input = document.getElementById('nameInput');
     const modal = document.getElementById('errorModal');
@@ -208,7 +254,6 @@
     };
     input.addEventListener("keyup", function(e) { if (e.key === "Enter") btn.click(); });
 
-    // ==== Step 2 / playful button, typing animation... (unchanged) ====
     function startStep2(){
       const evasBtn = document.getElementById('evasBtn');
       const wrap = document.querySelector('.evas-btn-wrap');
@@ -318,24 +363,16 @@
       }
     }
 
+    // "Google Search" action goes directly to "It's YOU!" (no video)
     document.getElementById("searchBtn").onclick = function() {
       document.getElementById("googleForm").classList.add("searching");
-      document.getElementById("searchInput");
       setTimeout(()=>{
         document.getElementById("searchSection").style.display='none';
-        showVideoSection();
+        showItsYouAnim();
       },800);
     };
 
-    function showVideoSection() {
-      document.getElementById("videoSection").style.display = "block";
-      setTimeout(()=>{
-        document.getElementById("videoSection").style.display = "none";
-        showItsYouAnim();
-      },3300);
-    }
-
-    // ==== "It's YOU!" animation with callback to falling animation ====
+    // "It's YOU!" animated floating messages, then falling birthday animation
     function showItsYouAnim(){
       const youAnim = document.getElementById('youAnim');
       youAnim.innerHTML = "";
@@ -371,15 +408,18 @@
       "panda-images/panda14.jpeg"
     ];
     function showFallingBirthday() {
+      // Pause/hide floating emojis while images are falling
+      stopFloatingEmojis();
+
       const section = document.getElementById('fallingBirthdaySection');
       section.style.display = 'block';
       section.style.opacity = 0;
-      setTimeout(()=>{ section.style.transition = "opacity 1.3s"; section.style.opacity = 1; }, 20);
+      setTimeout(()=>{ section.style.transition = "opacity 1s"; section.style.opacity = 1; }, 20);
 
       // create falling images
       const container = document.getElementById('fallingContainer');
       container.innerHTML = '';
-      const totalImages = 38;
+      const totalImages = 36;
       for (let i = 0; i < totalImages; i++) {
         const randomIndex = Math.floor(Math.random() * imageUrls.length);
         createFallingImage(imageUrls[randomIndex]);
@@ -390,19 +430,20 @@
         img.className = 'falling-img';
         img.style.left = `${Math.random() * 95}vw`;
         img.style.animationDelay = `${Math.random() * 11.5}s`;
-        img.style.animationDuration = 11 + Math.random() * 5 + 's';
+        img.style.animationDuration = 11 + Math.random() * 2.5 + 's';
         img.style.transform = `rotate(${Math.random() * 360}deg)`;
         container.appendChild(img);
       }
-      // Show for 14s, then fade away and finish with final message
+      // Show for 12s, then fade out and show final message
       setTimeout(()=>{
-        section.style.transition = "opacity 1.2s";
+        section.style.transition = "opacity 0.9s";
         section.style.opacity = 0;
         setTimeout(()=>{
           section.style.display = "none";
           document.getElementById('finalMsg').style.display = 'block';
-        }, 1200);
-      }, 14000);
+          // Resume floating balloons/hearts if you want them after, or leave off for the final message
+        }, 900);
+      }, 12000);
     }
   </script>
 </body>
