@@ -2,249 +2,196 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Panda Birthday Surprise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
   <style>
-    body, html {
+    * {
       margin: 0;
       padding: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background: #fbeaff;
+      box-sizing: border-box;
+      font-family: 'Roboto', sans-serif;
+    }
+    body {
+      background-color: #fff0f5;
       overflow-x: hidden;
     }
-    #login, #step2, #step3, #itsYou, #fallingImages {
+    #login-section, #question-section, #search-section, #its-you-section, #falling-section {
       display: none;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column;
       text-align: center;
+      padding: 20px;
     }
-    #login {
+    #login-section {
       display: flex;
+      flex-direction: column;
     }
-    input[type="text"] {
+    input {
       padding: 10px;
       font-size: 18px;
-      border-radius: 8px;
-      border: 2px solid #ccc;
+      margin-bottom: 10px;
     }
     button {
-      margin-top: 20px;
       padding: 10px 20px;
       font-size: 18px;
-      border: none;
-      border-radius: 8px;
-      background: #ff69b4;
+      background-color: #ff69b4;
       color: white;
+      border: none;
+      border-radius: 10px;
       cursor: pointer;
+      transition: 0.3s;
     }
-    #funButton {
-      position: relative;
+    button:hover {
+      background-color: #ff1493;
     }
-    #typedText {
-      white-space: pre-line;
-      font-size: 24px;
-      color: #444;
-      max-width: 90%;
-    }
-    #googleSearch {
+    .hidden {
       display: none;
-      height: 100vh;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
     }
-    .search-bar {
-      width: 90%;
-      max-width: 500px;
-      padding: 10px;
-      font-size: 20px;
-      border-radius: 25px;
-      border: 2px solid #ccc;
-      text-align: center;
-    }
-    .floating-text {
-      position: absolute;
-      font-size: 2rem;
-      animation: float 4s linear infinite;
-      color: #ff4081;
-    }
-    @keyframes float {
-      0% { left: -10%; }
-      100% { left: 110%; }
+    .typewriter-text {
+      font-size: 22px;
+      line-height: 1.6;
     }
     .falling-img {
-      position: absolute;
-      width: 80px;
+      position: fixed;
+      width: 70px;
+      z-index: 999;
       animation: fall linear infinite;
-      opacity: 0.8;
     }
     @keyframes fall {
-      0% { top: -100px; opacity: 0; transform: rotate(0deg); }
-      100% { top: 100vh; opacity: 1; transform: rotate(360deg); }
+      0% { top: -100px; opacity: 1; }
+      100% { top: 100vh; opacity: 0; }
     }
-    h1, h2 {
-      color: #d63384;
+    #birthday-message {
+      font-size: 30px;
+      font-family: 'Pacifico', cursive;
+      margin-top: 20px;
+      color: #ff1493;
     }
   </style>
 </head>
 <body>
-
-<audio id="bgMusic" src="https://www.computerhope.com/jargon/m/example.mp3" loop></audio>
-
-<!-- Step 1: Login -->
-<div id="login">
-  <div>
-    <h1>Please Enter Your Name Beautiful 🩷</h1>
-    <input type="text" id="nameInput" placeholder="Your name here" />
+  <div id="login-section">
+    <h2>Please Enter Your Name Beautiful 💖</h2>
+    <input type="text" id="name-input" placeholder="Your name here...">
     <button onclick="checkName()">Submit</button>
-    <p id="loginMessage"></p>
   </div>
-</div>
 
-<!-- Step 2 -->
-<div id="step2">
-  <h1 id="step2msg">Do You Know What’s the greatest thing happened on August 8?</h1>
-  <button id="funButton" onclick="buttonClicked()" onmouseover="moveButton()">Click here to know</button>
-  <p id="typedText"></p>
-</div>
-
-<!-- Step 3: Google Search -->
-<div id="googleSearch">
-  <h1>Searching...</h1>
-  <input class="search-bar" id="fakeSearch" type="text" readonly />
-</div>
-
-<!-- Step 4 Removed -->
-
-<!-- Step 5: It’s YOU! -->
-<div id="itsYou">
-  <div id="floatingWrapper">
-    <div class="floating-text" style="top: 10%;">It’s YOU! 🎉</div>
-    <div class="floating-text" style="top: 30%;">It’s YOU! 🎉</div>
-    <div class="floating-text" style="top: 50%;">It’s YOU! 🎉</div>
-    <div class="floating-text" style="top: 70%;">It’s YOU! 🎉</div>
-    <div class="floating-text" style="top: 90%;">It’s YOU! 🎉</div>
+  <div id="question-section">
+    <h2>Do You Know What’s the greatest thing happened on August 8?</h2>
+    <button id="escape-button" onclick="revealDisasters()">Click here to know</button>
+    <div id="typed-text" class="typewriter-text"></div>
   </div>
-</div>
 
-<!-- Step 6: Falling Images -->
-<div id="fallingImages">
-  <h1>Happy Birthday Panda! 🎂🎉</h1>
-  <h2>Wishing you endless smiles and panda hugs today and always!</h2>
-</div>
+  <div id="search-section">
+    <h2>Google Search</h2>
+    <input type="text" id="search-box" readonly>
+  </div>
 
-<script>
-  const login = document.getElementById('login');
-  const step2 = document.getElementById('step2');
-  const step3 = document.getElementById('googleSearch');
-  const itsYou = document.getElementById('itsYou');
-  const fallingImages = document.getElementById('fallingImages');
-  const bgMusic = document.getElementById('bgMusic');
+  <div id="its-you-section">
+    <h1 style="font-size: 60px; color: #ff1493;">It's YOU! 💕</h1>
+  </div>
 
-  function checkName() {
-    const name = document.getElementById('nameInput').value.trim().toLowerCase();
-    const message = document.getElementById('loginMessage');
+  <div id="falling-section">
+    <div id="birthday-message">
+      🎉 Happy Birthday Panda! 🎉<br>
+      <small>You are the reason this day is special. 💗</small>
+    </div>
+  </div>
 
-    if (name === 'panda') {
-      message.innerText = 'Welcome, bestie! Redirecting...';
-      bgMusic.play();
-      setTimeout(() => {
-        login.style.display = 'none';
-        step2.style.display = 'flex';
-      }, 4000);
-    } else {
-      alert("It’s a wrong input – baga alochinchu 😜");
-    }
-  }
+  <script>
+    const disasters = [
+      "1945 – USSR declares war on Japan.",
+      "1988 – 8888 Uprising in Myanmar begins.",
+      "1974 – U.S. President Nixon announces resignation.",
+      "2008 – Georgia and Russia go to war.",
+      "2010 – China landslide kills over 1,400.",
+      "2020 – Beirut explosion aftermath continues."
+    ];
 
-  let attempts = 0;
-  function moveButton() {
-    if (attempts < 5) {
-      const button = document.getElementById('funButton');
-      const x = Math.random() * (window.innerWidth - 200);
-      const y = Math.random() * (window.innerHeight - 100);
-      button.style.position = 'absolute';
-      button.style.left = `${x}px`;
-      button.style.top = `${y}px`;
-      attempts++;
-    }
-  }
+    let nameInput = document.getElementById('name-input');
+    let escapeCount = 0;
 
-  function buttonClicked() {
-    document.getElementById('funButton').style.display = 'none';
-    document.getElementById('step2msg').style.display = 'none';
-    typeText("- Natural disasters 🌀\n- Internet outages 🌐\n- Power failures ⚡", () => {
-      setTimeout(() => {
-        document.getElementById('typedText').innerText = "Do You Know What’s the greatest things happened on August 8?";
+    function checkName() {
+      const name = nameInput.value.trim().toLowerCase();
+      if (name === "panda") {
+        alert("Welcome, bestie! Redirecting...");
         setTimeout(() => {
-          step2.style.display = 'none';
-          startGoogleSearch();
-        }, 2000);
-      }, 2000);
+          document.getElementById('login-section').style.display = 'none';
+          document.getElementById('question-section').style.display = 'flex';
+        }, 4000);
+      } else {
+        alert("It’s a wrong input – baga alochinchu");
+      }
+    }
+
+    const escapeBtn = document.getElementById("escape-button");
+    escapeBtn.addEventListener("mouseover", () => {
+      if (escapeCount < 5) {
+        escapeBtn.style.position = "absolute";
+        escapeBtn.style.top = Math.random() * 80 + "%";
+        escapeBtn.style.left = Math.random() * 80 + "%";
+        escapeCount++;
+      }
     });
-  }
 
-  function typeText(text, callback) {
-    let i = 0;
-    const speed = 50;
-    const typedText = document.getElementById('typedText');
-    typedText.innerText = '';
+    function revealDisasters() {
+      escapeBtn.style.display = 'none';
+      document.getElementById("typed-text").innerHTML = "";
+      let i = 0;
+      const interval = setInterval(() => {
+        if (i < disasters.length) {
+          document.getElementById("typed-text").innerHTML += `• ${disasters[i]}<br>`;
+          i++;
+        } else {
+          clearInterval(interval);
+          setTimeout(() => {
+            document.getElementById("typed-text").innerHTML += `<br><strong>Do You Know What’s the greatest things happened on August 8?</strong>`;
+            setTimeout(showSearch, 3000);
+          }, 3000);
+        }
+      }, 1500);
+    }
 
-    function type() {
-      if (i < text.length) {
-        typedText.innerText += text.charAt(i);
-        i++;
-        setTimeout(type, speed);
-      } else {
-        callback();
+    function showSearch() {
+      document.getElementById("question-section").style.display = 'none';
+      document.getElementById("search-section").style.display = 'flex';
+      let text = "Best thing happened on 8th August?";
+      let i = 0;
+      const box = document.getElementById("search-box");
+      const typeInterval = setInterval(() => {
+        if (i < text.length) {
+          box.value += text.charAt(i);
+          i++;
+        } else {
+          clearInterval(typeInterval);
+          setTimeout(() => {
+            document.getElementById("search-section").style.display = 'none';
+            document.getElementById("its-you-section").style.display = 'flex';
+            setTimeout(showFallingImages, 3000);
+          }, 1500);
+        }
+      }, 100);
+    }
+
+    function showFallingImages() {
+      document.getElementById("its-you-section").style.display = 'none';
+      document.getElementById("falling-section").style.display = 'flex';
+      const imageFolder = "panda-images/";
+      const imageCount = 14;
+      const extensions = [".jpg", ".jpeg"];
+      for (let i = 1; i <= imageCount; i++) {
+        const img = document.createElement("img");
+        const ext = extensions[i % extensions.length];
+        img.src = `${imageFolder}${i}${ext}`;
+        img.classList.add("falling-img");
+        img.style.left = Math.random() * 100 + "vw";
+        img.style.animationDuration = (Math.random() * 3 + 4) + "s";
+        img.style.width = "80px";
+        document.body.appendChild(img);
       }
     }
-    type();
-  }
-
-  function startGoogleSearch() {
-    step3.style.display = 'flex';
-    const searchBox = document.getElementById('fakeSearch');
-    const question = "Best thing happened on 8th August?";
-    let i = 0;
-    function typeSearch() {
-      if (i < question.length) {
-        searchBox.value += question.charAt(i);
-        i++;
-        setTimeout(typeSearch, 100);
-      } else {
-        setTimeout(() => {
-          step3.style.display = 'none';
-          startItsYou();
-        }, 2000);
-      }
-    }
-    typeSearch();
-  }
-
-  function startItsYou() {
-    itsYou.style.display = 'flex';
-    setTimeout(() => {
-      itsYou.style.display = 'none';
-      startFallingImages();
-    }, 4000);
-  }
-
-  function startFallingImages() {
-    fallingImages.style.display = 'flex';
-    for (let i = 0; i < 14; i++) {
-      const img = document.createElement('img');
-      const ext = i % 2 === 0 ? 'jpg' : 'jpeg';
-      img.src = `images/image${i + 1}.${ext}`;
-      img.className = 'falling-img';
-      img.style.left = Math.random() * 100 + 'vw';
-      img.style.animationDuration = (Math.random() * 3 + 3) + 's';
-      img.style.width = (Math.random() * 40 + 80) + 'px';
-      document.body.appendChild(img);
-    }
-  }
-</script>
+  </script>
 </body>
 </html>
