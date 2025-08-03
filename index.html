@@ -6,16 +6,12 @@
   <title>Panda Birthday Surprise</title>
   <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,700&display=swap" rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: #ffeefc;
       min-height: 100vh;
-      width: 100vw;
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       overflow-x: hidden;
-      position: relative;
-      color: #da627d;
     }
     .section { display: none; }
     .section.active { display: block; }
@@ -35,28 +31,24 @@
     }
     .floating-paused { display: none !important; }
     @keyframes floatUp {
-      0% { transform: translateY(0) scale(1);}
+      0% { transform: translateY(0) scale(1); }
       83% { opacity: 0.81; }
-      100% { transform: translateY(-110vh) scale(1.20); opacity: 0.17;}
+      100% { transform: translateY(-110vh) scale(1.20); opacity: 0.17; }
     }
 
-    /* Falling Birthday Animation Section */
+    /* Falling images animation (no greeting overlay) */
     #fallingBirthdaySection {
       position: fixed;
-      left: 0; top: 0; width: 100vw; height: 100vh;
+      left: 0; top: 0;
+      width: 100vw; height: 100vh;
       background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
       z-index: 99;
       display: none;
       overflow: hidden;
     }
     .falling-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      top: 0; left: 0;
-      z-index: 2;
-      pointer-events: none;
+      position: absolute; width: 100%; height: 100%;
+      overflow: hidden; top: 0; left: 0; z-index: 2; pointer-events: none;
     }
     .falling-img {
       position: absolute;
@@ -73,66 +65,75 @@
     @keyframes fall {
       0% { transform: translateY(-120px) rotate(0deg); opacity: 1; }
       95%{ opacity: 1;}
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0;}
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
     @media (max-width:700px) {
       .falling-img { width: 52px; height: 52px; max-width: 30vw; max-height: 30vw;}
     }
+
     .final-msg {
-      display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto;
-      text-align: center; font-weight: bold; background: rgba(255,255,255,0.74);
-      border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem;
-      box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;
+      display: none;
+      font-size: 1.31rem;
+      color: #d14d72;
+      margin: 2.5rem auto 0 auto;
+      text-align: center;
+      font-weight: bold;
+      background: rgba(255,255,255,0.74);
+      border-radius: 18px;
+      max-width: 430px;
+      padding: 1.3rem 1rem 1.1rem 1rem;
+      box-shadow: 0 3px 16px rgba(168,68,162,0.10);
+      line-height: 1.7;
     }
-    .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px;}
-    .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97;}
+    .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px; }
+    .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97; }
   </style>
 </head>
 <body>
   <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
-  <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
 
-  <!-- Floating emoji layer (always present, show/hide as needed) -->
+  <!-- Floating emoji layer -->
   <div id="emojiFloatLayer"></div>
 
+  <!-- Login -->
   <div id="step1" class="section active">
-    <div class="login-container">
-      <div class="input-row">
-        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
-        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" />
+    <div class="login-container" style="background:#fffafc; border:2px solid #f7aef8; border-radius:22px; padding:2.5rem 2rem; max-width:340px; width:96vw; box-shadow:0 8px 32px rgba(218,98,125,0.08); display: flex; flex-direction:column; align-items:center; position:relative; margin:8vh auto 0 auto; z-index:2;">
+      <div class="input-row" style="display:flex; align-items:center; width:100%; gap:10px; margin-bottom:1.5rem;">
+        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" style="width:38px;height:38px;"/>
+        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" style="flex:1 1 0; padding:0.72rem 1rem; border:1.4px solid #f7aef8; border-radius:8px; font-size:1rem; background:#fff7fb; color:#da627d;"/>
       </div>
-      <button id="enterBtn">Enter</button>
-      <div class="welcome" id="welcomeMsg">Welcome, bestie! Redirecting... 🎈</div>
-      <div id="errorModal" class="modal">
-        <div class="modal-content" onclick="event.stopPropagation();">
-          <span id="wrongText">It's a wrong input</span>
-          <div class="modal-small-text">baga alochinchu</div>
+      <button id="enterBtn" style="width:100%; padding:0.75rem 0; margin-top:0.5rem; background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-size:1.15rem; font-weight:bold; cursor:pointer; box-shadow:0 2px 8px rgba(218,98,125,0.08);">Enter</button>
+      <div class="welcome" id="welcomeMsg" style="display:none;font-size:1.11rem;color:#da627d;margin-top:1.35rem;text-align:center;font-weight:bold;letter-spacing:0.2px;">Welcome, bestie! Redirecting... 🎈</div>
+      <div id="errorModal" class="modal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;align-items:center;justify-content:center;background:rgba(247,174,248,0.19);z-index:100;">
+        <div class="modal-content" onclick="event.stopPropagation();" style="background:#fff0f8;border-radius:14px;padding:1.1rem 1.2rem 0.7rem 1.2rem;min-width:220px;border:1px solid #f7aef8;box-shadow:0 4px 24px rgba(218,98,125,0.09);text-align:center;transform:scale(1.1);">
+          <span id="wrongText" style="color:#da627d; font-weight:700; font-size:1.04rem; letter-spacing:0.6px;">It's a wrong input</span>
+          <div class="modal-small-text" style="color:#a844a2; font-size:0.66rem; margin-top:0.32rem; font-style:italic; opacity:0.9;">baga alochinchu</div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- Main content -->
   <div id="step2" class="section">
-    <div class="centered">
+    <div class="centered" style="text-align:center; margin-top:4.5vh;">
       <div class="main-msg" id="mainMsg">Do You Know What's the greatest things happened on August 8? </div>
-      <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px;">
-        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%);">
-          Click here to know
-        </button>
+      <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px; margin-bottom:2.3rem;">
+        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%); background:#f7aef8; color:#da627d; border:none; border-radius:14px; font-size:1.09rem; font-weight:bold; padding:0.88rem 2.1rem; box-shadow:0 2px 12px rgba(138,43,226,0.09);">Click here to know</button>
       </div>
       <div class="typing-area" id="typingArea" style="display:none;"></div>
       <div class="fade-message" id="aug8Best" style="display:none;">Do You Know What's the greatest things happened on August 8? </div>
     </div>
 
     <div id="searchSection">
-      <form id="googleForm" class="search-box" onsubmit="return false;">
+      <form id="googleForm" class="search-box" onsubmit="return false;" style="background:#fff; border-radius:28px; box-shadow:0 2px 16px rgba(100,0,155,0.10); padding:16px 20px; min-width:300px; max-width:90vw; display: flex; align-items: center;">
         <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="23" style="margin-right:7px;" />
-        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google">
-        <button class="search-btn" id="searchBtn">Google Search</button>
+        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google" style="border:none;outline:none;font-size:1.08rem;width:240px;flex-grow:1;margin-right:10px;"/>
+        <button class="search-btn" id="searchBtn" style="background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-weight:bold; padding:9px 20px; font-size:1.07rem; cursor:pointer;">Google Search</button>
       </form>
     </div>
     <div class="itsYou-wrap" id="youAnim"></div>
 
+    <!-- Falling panda images only -->
     <div id="fallingBirthdaySection">
       <div class="falling-container" id="fallingContainer"></div>
     </div>
@@ -144,7 +145,7 @@
   </div>
 
   <script>
-    // Floating hearts/balloons
+    // Floating hearts/balloons logic
     const emojiFloatLayer = document.getElementById('emojiFloatLayer');
     const emojis = ["❤️","🎈"];
     let floatInterval = null;
@@ -175,7 +176,7 @@
     }
     startFloatingEmojis();
 
-    // Login, UI logic
+    // Login/typing/animation flow (unchanged except new emoji hiding logic)
     const btn = document.getElementById('enterBtn');
     const input = document.getElementById('nameInput');
     const modal = document.getElementById('errorModal');
@@ -366,6 +367,7 @@
         setTimeout(()=>{
           section.style.display = "none";
           document.getElementById('finalMsg').style.display = 'block';
+          // Optionally, you could call resumeFloatingEmojis() here to bring them back for the final message.
         }, 900);
       }, 12000);
     }
