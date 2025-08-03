@@ -2,195 +2,426 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panda Birthday Surprise</title>
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
+
+    /* Reset */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: 'Roboto', sans-serif;
     }
+
     body {
-      background-color: #fff0f5;
+      background: #ffeefc; /* Keeping page bg consistent */
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
       overflow-x: hidden;
+      position: relative;
+      color: #da627d;
     }
-    #login-section, #question-section, #search-section, #its-you-section, #falling-section {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      text-align: center;
-      padding: 20px;
-    }
-    #login-section {
-      display: flex;
-      flex-direction: column;
-    }
-    input {
-      padding: 10px;
-      font-size: 18px;
-      margin-bottom: 10px;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 18px;
-      background-color: #ff69b4;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background-color: #ff1493;
-    }
-    .hidden {
-      display: none;
-    }
-    .typewriter-text {
-      font-size: 22px;
-      line-height: 1.6;
+
+.birthday-text {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  font-weight: bold;
+  color: #ff4081;
+  text-shadow: 2px 2px 8px #000;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+.hidden {
+  display: none;
+}
+
+    .section { display: none; }
+    .section.active { display: block; }
+    .login-container { background: #fffafc; border: 2px solid #f7aef8; border-radius: 22px; padding: 2.5rem 2rem; max-width: 340px; width: 96vw; box-shadow: 0 8px 32px rgba(218,98,125,0.08); display: flex; flex-direction: column; align-items: center; position: relative; margin: 8vh auto 0 auto; z-index: 2; }
+    .input-row { display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 1.5rem; }
+    .panda-icon { width: 38px; height: 38px;}
+    #nameInput { flex: 1 1 0; padding: 0.72rem 1rem; border: 1.4px solid #f7aef8; border-radius: 8px; font-size: 1rem; background: #fff7fb; color: #da627d; transition: border 0.2s; outline: none;}
+    #nameInput:focus { border: 2px solid #da627d; }
+    #enterBtn { width: 100%; padding: 0.75rem 0; margin-top: 0.5rem; background: #f7aef8; color: #da627d; border: none; border-radius: 8px; font-size: 1.15rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(218,98,125,0.08); transition: background 0.18s, transform 0.11s; }
+    #enterBtn:hover, #enterBtn:focus { background: #ffd6fa; transform: translateY(-2px) scale(1.03); }
+    .welcome { display: none; font-size: 1.11rem; color: #da627d; margin-top: 1.35rem; text-align: center; font-weight: bold; letter-spacing: 0.2px;}
+    .modal { display: none; position: fixed; left:0; top:0; right:0; bottom:0; align-items: center; justify-content: center; background: rgba(247,174,248,0.19); z-index: 100; }
+    .modal-content { background: #fff0f8; border-radius: 14px; padding: 1.1rem 1.2rem 0.7rem 1.2rem; min-width: 220px; border: 1px solid #f7aef8; box-shadow: 0 4px 24px rgba(218,98,125,0.09); text-align: center; transform: scale(1.1); animation: pop 0.21s;}
+    @keyframes pop { 0%{transform:scale(0.88);} 100%{transform:scale(1.1);} }
+    #wrongText { color: #da627d; font-weight: 700; font-size: 1.04rem; letter-spacing: 0.6px; }
+    .modal-small-text { color: #a844a2; font-size: 0.66rem; margin-top: 0.32rem; font-style: italic; opacity:0.9;}
+    .centered { text-align: center; margin-top: 4.5vh; }
+    .main-msg { font-size: 1.3rem; color: #a844a2; font-weight: 700; margin: 2.2rem auto 2.1rem auto; font-family: inherit; }
+    .evas-btn-wrap { position: relative!important; height: 70px; margin-bottom: 2.3rem; min-width:180px;}
+    #evasBtn { position: absolute; left: 50%; top: 0; transform: translateX(-50%); background: #f7aef8; color: #da627d; border: none; border-radius: 14px; font-size: 1.09rem; font-weight: bold; padding: 0.88rem 2.1rem; box-shadow: 0 2px 12px rgba(138,43,226,0.09); cursor: pointer; transition: background 0.2s, transform 0.19s; z-index: 2; }
+    #evasBtn:hover, #evasBtn:focus { background: #ffd6fa; }
+    .typing-area { font-size: 1.11rem; color: #d14d72; background: rgba(255,255,255,0.72); border-radius: 18px; max-width: 540px; margin: 0 auto; padding: 1.4rem 1.1rem; line-height: 1.7; font-family: inherit; min-height: 180px; text-align: left; box-shadow: 0 4px 22px rgba(218,98,125,0.05);}
+    .fade-message { opacity: 0; font-size: 1.2rem; color: #a844a2; margin-top: 2rem; font-weight: 600; transition: opacity 0.8s;}
+    .itsYou-wrap { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 10; overflow: hidden; display: none;}
+    .itsYou { position: absolute; white-space: nowrap; font-size: 2.6rem; font-weight: bold; color: #8a2be2; opacity: 0.9; animation: youMove 4s linear infinite; text-shadow: 0 1px 7px #f7aef8; font-family: inherit; }
+    @keyframes youMove { 0% { left: -15vw;} 100% { left: 110vw;} }
+    #searchSection {display:none; justify-content: center; align-items:center; margin-top: 40px;}
+    .search-box { background: #fff; border-radius:28px; box-shadow:0 2px 16px rgba(100,0,155,0.10); padding:16px 20px; min-width:300px; max-width:90vw; display: flex; align-items: center;}
+    .search-input { border:none; outline:none; font-size:1.08rem; width:240px; flex-grow:1; margin-right:10px;}
+    .search-btn { background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-weight:bold; padding:9px 20px; font-size:1.07rem; cursor:pointer;}
+    .search-btn:active { background:#ffd6fa;}
+    #videoSection {display:none; text-align:center; margin:30px auto;}
+    #videoPlaceholder { width:340px; height:190px; border-radius:13px; background:#f7aef8; display:flex; align-items:center; justify-content:center; color:#a844a2; font-size:1.15rem; margin:0 auto;}
+
+    /* === Falling Images Animation Styles === */
+    .falling-container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 3; /* Above most, but behind message */
+      pointer-events: none;
     }
     .falling-img {
-      position: fixed;
-      width: 70px;
-      z-index: 999;
-      animation: fall linear infinite;
+      position: absolute;
+      width: 90px;
+      height: auto;
+      animation: fall 12s linear infinite;
+      will-change: transform, opacity;
+      user-select: none;
     }
     @keyframes fall {
-      0% { top: -100px; opacity: 1; }
-      100% { top: 100vh; opacity: 0; }
+      0% {
+        transform: translateY(-150px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
-    #birthday-message {
-      font-size: 30px;
+    /* Birthday message styling */
+    .birthday-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 5;
+      animation: fadeIn 2s ease-in-out 1s forwards;
+      opacity: 0;
+      max-width: 90vw;
+      user-select: none;
+    }
+    .birthday-message h1 {
       font-family: 'Pacifico', cursive;
-      margin-top: 20px;
-      color: #ff1493;
+      font-size: 2.5em;
+      color: #ff4081;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px #fff;
     }
+    .birthday-message p {
+      font-size: 1.2em;
+      color: #444;
+      text-shadow: 1px 1px #fff;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Hide original floating balloons and hearts */
+    .floating {
+      display: none!important;
+    }
+
+    .final-msg { display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto; text-align: center; font-weight: bold; background: rgba(255,255,255,0.74); border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem; box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;}
+    .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px;}
+    .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97; }
+    @media (max-width: 700px) { .evas-btn-wrap { width: 96vw; min-height: 55px; } #evasBtn { font-size: 1rem; padding: 0.7rem 1.2rem; } }
   </style>
 </head>
 <body>
-  <div id="login-section">
-    <h2>Please Enter Your Name Beautiful 💖</h2>
-    <input type="text" id="name-input" placeholder="Your name here...">
-    <button onclick="checkName()">Submit</button>
-  </div>
+  <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
+  <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
 
-  <div id="question-section">
-    <h2>Do You Know What’s the greatest thing happened on August 8?</h2>
-    <button id="escape-button" onclick="revealDisasters()">Click here to know</button>
-    <div id="typed-text" class="typewriter-text"></div>
-  </div>
-
-  <div id="search-section">
-    <h2>Google Search</h2>
-    <input type="text" id="search-box" readonly>
-  </div>
-
-  <div id="its-you-section">
-    <h1 style="font-size: 60px; color: #ff1493;">It's YOU! 💕</h1>
-  </div>
-
-  <div id="falling-section">
-    <div id="birthday-message">
-      🎉 Happy Birthday Panda! 🎉<br>
-      <small>You are the reason this day is special. 💗</small>
+  <div id="step1" class="section active">
+    <div class="login-container">
+      <div class="input-row">
+        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
+        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" />
+      </div>
+      <button id="enterBtn">Enter</button>
+      <div class="welcome" id="welcomeMsg">Welcome, bestie! Redirecting... 🎈</div>
+      <div id="errorModal" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation();">
+          <span id="wrongText">It's a wrong input</span>
+          <div class="modal-small-text">baga alochinchu</div>
+        </div>
+      </div>
     </div>
   </div>
 
+  <div id="step2" class="section">
+    <div class="centered">
+      <div class="main-msg" id="mainMsg">Do You Know What's the greatest things happened on August 8? </div>
+      <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px;">
+        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%);">
+          Click here to know
+        </button>
+      </div>
+      <div class="typing-area" id="typingArea" style="display:none;"></div>
+      <div class="fade-message" id="aug8Best" style="display:none;">Do You Know What's the greatest things happened on August 8? </div>
+    </div>
+
+    <div id="searchSection">
+      <form id="googleForm" class="search-box" onsubmit="return false;">
+        <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="23" style="margin-right:7px;" />
+        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google"/>
+        <button class="search-btn" id="searchBtn">Google Search</button>
+      </form>
+    </div>
+
+    <div id="videoSection">
+      <div id="videoPlaceholder">[ 3-sec Surprise Video Here Soon! ]</div>
+    </div>
+
+    <div class="itsYou-wrap" id="youAnim"></div>
+
+    <!-- Falling images container added right after "It's YOU" animation -->
+    <div class="falling-container" id="fallingContainer"></div>
+
+    <!-- Birthday message centered above falling images (higher z-index) -->
+    <div class="birthday-message" id="fallingBirthdayMessage">
+      <h1>Happy Birthday Panda!</h1>
+      <p>Happy Birthday Panda 🎉🎈</p>
+    </div>
+
+  </div>
+
+  <div class="final-msg" id="finalMsg" style="display:none;">
+    "Have a beautiful birthday full of smiles, laughter, and love"
+ <span class="heart">🐼💖</span>
+    <span class="quote">— The world is lucky to have you.</span>
+  </div>
+
   <script>
-    const disasters = [
-      "1945 – USSR declares war on Japan.",
-      "1988 – 8888 Uprising in Myanmar begins.",
-      "1974 – U.S. President Nixon announces resignation.",
-      "2008 – Georgia and Russia go to war.",
-      "2010 – China landslide kills over 1,400.",
-      "2020 – Beirut explosion aftermath continues."
-    ];
+    // ==== Core UI flow scripts ====
 
-    let nameInput = document.getElementById('name-input');
-    let escapeCount = 0;
-
-    function checkName() {
-      const name = nameInput.value.trim().toLowerCase();
-      if (name === "panda") {
-        alert("Welcome, bestie! Redirecting...");
-        setTimeout(() => {
-          document.getElementById('login-section').style.display = 'none';
-          document.getElementById('question-section').style.display = 'flex';
+    const btn = document.getElementById('enterBtn');
+    const input = document.getElementById('nameInput');
+    const modal = document.getElementById('errorModal');
+    const welcome = document.getElementById('welcomeMsg');
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    modal.onclick = function() { modal.style.display = 'none'; };
+    btn.onclick = function() {
+      const val = input.value.trim().toLowerCase();
+      if(val === "panda") {
+        welcome.style.display = 'block';
+        document.getElementById('bgMusic').play().catch(()=>{});
+        setTimeout(()=>{
+          step1.classList.remove('active');
+          step2.classList.add('active');
+          startStep2();
         }, 4000);
       } else {
-        alert("It’s a wrong input – baga alochinchu");
+        modal.style.display = "flex";
       }
-    }
+    };
+    input.addEventListener("keyup", function(e) { if (e.key === "Enter") btn.click(); });
 
-    const escapeBtn = document.getElementById("escape-button");
-    escapeBtn.addEventListener("mouseover", () => {
-      if (escapeCount < 5) {
-        escapeBtn.style.position = "absolute";
-        escapeBtn.style.top = Math.random() * 80 + "%";
-        escapeBtn.style.left = Math.random() * 80 + "%";
-        escapeCount++;
+    // Removed balloons & hearts to comply with new animation style
+
+    function startStep2(){
+      const evasBtn = document.getElementById('evasBtn');
+      const wrap = document.querySelector('.evas-btn-wrap');
+      let moveTimes = 0;
+      const maxMoves = 5;
+      function getRandomPosition() {
+        const btnWidth = evasBtn.offsetWidth;
+        const btnHeight = evasBtn.offsetHeight;
+        const containerWidth = wrap.clientWidth;
+        const containerHeight = wrap.clientHeight;
+        const padding = 8;
+        const safeWidth = Math.max(containerWidth, btnWidth+padding*2);
+        const safeHeight = Math.max(containerHeight, btnHeight+padding*2);
+        const maxX = safeWidth - btnWidth - padding;
+        const maxY = safeHeight - btnHeight - padding;
+        const left = Math.max(padding, Math.floor(Math.random() * maxX));
+        const top = Math.max(padding, Math.floor(Math.random() * maxY));
+        return { left, top };
       }
-    });
-
-    function revealDisasters() {
-      escapeBtn.style.display = 'none';
-      document.getElementById("typed-text").innerHTML = "";
-      let i = 0;
-      const interval = setInterval(() => {
-        if (i < disasters.length) {
-          document.getElementById("typed-text").innerHTML += `• ${disasters[i]}<br>`;
-          i++;
-        } else {
-          clearInterval(interval);
-          setTimeout(() => {
-            document.getElementById("typed-text").innerHTML += `<br><strong>Do You Know What’s the greatest things happened on August 8?</strong>`;
-            setTimeout(showSearch, 3000);
-          }, 3000);
+      evasBtn.onmouseenter = function () {
+        if (moveTimes < maxMoves) {
+          moveTimes++;
+          const pos = getRandomPosition();
+          evasBtn.style.left = pos.left + "px";
+          evasBtn.style.top = pos.top + "px";
+          evasBtn.style.transform = "";
         }
-      }, 1500);
-    }
-
-    function showSearch() {
-      document.getElementById("question-section").style.display = 'none';
-      document.getElementById("search-section").style.display = 'flex';
-      let text = "Best thing happened on 8th August?";
-      let i = 0;
-      const box = document.getElementById("search-box");
-      const typeInterval = setInterval(() => {
-        if (i < text.length) {
-          box.value += text.charAt(i);
-          i++;
-        } else {
-          clearInterval(typeInterval);
-          setTimeout(() => {
-            document.getElementById("search-section").style.display = 'none';
-            document.getElementById("its-you-section").style.display = 'flex';
-            setTimeout(showFallingImages, 3000);
-          }, 1500);
-        }
-      }, 100);
-    }
-
-    function showFallingImages() {
-      document.getElementById("its-you-section").style.display = 'none';
-      document.getElementById("falling-section").style.display = 'flex';
-      const imageFolder = "panda-images/";
-      const imageCount = 14;
-      const extensions = [".jpg", ".jpeg"];
-      for (let i = 1; i <= imageCount; i++) {
-        const img = document.createElement("img");
-        const ext = extensions[i % extensions.length];
-        img.src = `${imageFolder}${i}${ext}`;
-        img.classList.add("falling-img");
-        img.style.left = Math.random() * 100 + "vw";
-        img.style.animationDuration = (Math.random() * 3 + 4) + "s";
-        img.style.width = "80px";
-        document.body.appendChild(img);
+      };
+      evasBtn.onclick = typingSequence;
+      evasBtn.disabled = false; evasBtn.innerText = "Click here to know"; evasBtn.style.opacity=1; evasBtn.style.transform='';
+      let alreadyHidden = false;
+      function typingSequence(){
+        evasBtn.disabled=true; evasBtn.style.opacity=0.55; evasBtn.innerText="Processing...";
+        setTimeout(()=>{
+          if(!alreadyHidden){
+            wrap.style.display='none';
+            alreadyHidden = true;
+          }
+          document.getElementById('mainMsg').style.display='none';
+          document.getElementById('typingArea').style.display='block';
+          runTypingAnimation();
+        },600);
       }
+      function runTypingAnimation(){
+        const msg = `
+<b>based on historical records, these are all the disasters that happend on 8th August.</b><br>
+<br>
+<b>Natural Disasters</b><br>
+<span style="color:#d14d72;">&#8226;</span> <b>2023 Maui Wildfires, United States</b>: The devastating series of wildfires on the Hawaiian island of Maui began on August 8, 2023.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>2010 Gansu Mudslide, China</b>: A massive and deadly mudslide struck Zhouqu County in the Gansu province during the night of August 8, 2010.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>1993 Guam Earthquake</b>: A powerful earthquake with a magnitude of 7.8 struck the island of Guam on the evening of August 8, 1993.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>1975 Banqiao Dam Collapse, China</b>: Triggered by Typhoon Nina, the Banqiao Dam and numerous other dams in the region failed in the early morning hours of August 8, 1975.<br>
+<br>
+<b>Accidents and Human-Caused Disasters</b><br>
+<span style="color:#a844a2;">&#8226;</span> <b>2019 Missile Test Explosion, Russia</b>: An explosion at a military test site near Nyonoksa, resulting in a radiation spike, occurred on August 8, 2019.<br>
+<span style="color:#a844a2;">&#8226;</span> <b>2009 Hudson River Mid-air Collision, United States</b>: A tour helicopter and a private plane collided over the Hudson River, killing nine people on August 8, 2009.<br>
+<br>
+<b>Terrorism and Violent Conflicts</b><br>
+<span style="color:#8a2be2;">&#8226;</span> <b>2016 Hospital Attack, Pakistan</b>: A suicide bomber targeted the emergency ward of a government hospital in Quetta on August 8, 2016, killing at least 70 people.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>2013 Funeral Bombing, Pakistan</b>: A suicide bomber attacked a funeral for a police officer in Quetta on August 8, 2013.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1998 Consulate Raid, Afghanistan</b>: The raid by the Taliban on the Iranian consulate in Mazar-i-Sharif, resulting in the death of diplomats and a journalist, took place on August 8, 1998.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1988 Pro-Democracy Uprising, Myanmar</b>: The 8888 Uprising, a nationwide protest for democracy, was named for its start date of August 8, 1988.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1945 Soviet Declaration of War, WWII</b>: The Soviet Union officially declared war on the Empire of Japan on August 8, 1945, and commenced its invasion of Manchuria."<br>
+        `;
+        let i = 0, speed=19;
+        const el=document.getElementById('typingArea');
+        el.innerHTML="";
+        function typing(){
+          if(i<msg.length) {
+            el.innerHTML = msg.slice(0,i+1);
+            i++;
+            setTimeout(typing,speed);
+          } else {
+            setTimeout(()=>{
+              document.getElementById('typingArea').style.display='none';
+              let aug8Best = document.getElementById('aug8Best');
+              aug8Best.style.display='block'; aug8Best.style.opacity=1;
+              setTimeout(()=>{
+                aug8Best.style.opacity=0;
+                showSearchUI();
+              },2300);
+            },2000);
+          }
+        }
+        typing();
+      }
+      function showSearchUI() {
+        document.getElementById("aug8Best").style.display='none';
+        document.getElementById("searchSection").style.display = "flex";
+        const ginput = document.getElementById("googleQuery");
+        const quest = "Best thing happened on 8th August?";
+        ginput.value = "";
+        let j=0;
+        ginput.focus();
+        function typeQ() {
+          if(j < quest.length) {
+            ginput.value += quest.charAt(j);
+            j++;
+            setTimeout(typeQ, 37);
+          } else {
+            setTimeout(()=>{
+              document.getElementById("searchBtn").click();
+            },410);
+          }
+        }
+        typeQ();
+      }
+    }
+
+    document.getElementById("searchBtn").onclick = function() {
+      document.getElementById("googleForm").classList.add("searching");
+      document.getElementById("searchInput");
+      setTimeout(()=>{
+        document.getElementById("searchSection").style.display='none';
+        showVideoSection();
+      },800);
+    };
+
+    function showVideoSection() {
+      document.getElementById("videoSection").style.display = "block";
+      setTimeout(()=>{
+        document.getElementById("videoSection").style.display = "none";
+        showItsYouAnim();
+      },3300);
+    }
+
+    function showItsYouAnim(){
+      const youAnim = document.getElementById('youAnim');
+      youAnim.innerHTML = "";
+      youAnim.style.display='block';
+      let positions = [13,28,46,62,78];
+      positions.forEach((top,idx)=>{
+        let div = document.createElement('div');
+        div.className = "itsYou";
+        div.style.top = `${top}vh`;
+        div.style.animationDuration = (3.5+idx*0.2)+"s";
+        div.innerText = "It’s YOU! 🎉";
+        youAnim.appendChild(div);
+      });
+      setTimeout(()=>{
+        youAnim.style.display='none';
+        // Show falling images animation and birthday message after "It's You!"
+        startFallingImagesAnimation();
+      },4000);
+    }
+
+    // ========= Falling Images Birthday Animation =========
+    const imageUrls = [
+      "panda-images/panda1.jpeg",
+      "panda-images/panda2.jpeg",
+      "panda-images/panda3.jpeg",
+      "panda-images/panda4.jpg",
+      "panda-images/panda5.jpg",
+      "panda-images/panda6.jpg",
+      "panda-images/panda7.jpg",
+      "panda-images/panda10.jpg",
+      "panda-images/panda11.jpg",
+      "panda-images/panda12.jpg",
+      "panda-images/panda13.jpeg",
+      "panda-images/panda14.jpeg"
+    ];
+
+    function startFallingImagesAnimation() {
+
+      document.getElementById("birthdayMessage").classList.remove("hidden");
+
+      const container = document.getElementById('fallingContainer');
+      container.innerHTML = ''; // Clear if rerun
+      const totalImages = 40; // Number of simultaneous falling images
+      
+      for (let i = 0; i < totalImages; i++) {
+        const randomIndex = Math.floor(Math.random() * imageUrls.length);
+        createFallingImage(imageUrls[randomIndex]);
+      }
+
+      function createFallingImage(url) {
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'falling-img';
+        img.style.left = `${Math.random() * 100}vw`;
+        img.style.animationDelay = `${Math.random() * 12}s`;
+        img.style.animationDuration = 12 + Math.random() * 5 + 's'; // 12-17s falling speed
+        img.style.transform = `rotate(${Math.random() * 360}deg)`;
+        container.appendChild(img);
+      }
+  setTimeout(() => {
+    document.getElementById("birthdayMessage").classList.add("hidden");
+  }, 12000);
     }
   </script>
 </body>
