@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panda Birthday Surprise</title>
   <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,700&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -32,13 +31,14 @@
       pointer-events: none;
       opacity: 0.61;
       left: 0;
+      transition: opacity 0.4s;
     }
+    .floating-paused { display: none !important; }
     @keyframes floatUp {
       0% { transform: translateY(0) scale(1);}
       83% { opacity: 0.81; }
       100% { transform: translateY(-110vh) scale(1.20); opacity: 0.17;}
     }
-    .floating-paused { display: none !important; }
 
     /* Falling Birthday Animation Section */
     #fallingBirthdaySection {
@@ -60,10 +60,8 @@
     }
     .falling-img {
       position: absolute;
-      width: 90px;
-      height: 90px;
-      max-width: 20vw;
-      max-height: 20vw;
+      width: 90px; height: 90px;
+      max-width: 20vw; max-height: 20vw;
       object-fit: cover;
       border-radius: 16px;
       box-shadow: 0 3px 16px #e0bbec44;
@@ -77,54 +75,9 @@
       95%{ opacity: 1;}
       100% { transform: translateY(110vh) rotate(360deg); opacity: 0;}
     }
-
-    .birthday-message {
-      position: absolute;
-      top: 52%; left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: 10;
-      animation: fadeIn 1.2s cubic-bezier(.52,0,.44,1) .2s forwards;
-      opacity: 0;
-      max-width: 93vw;
-      user-select: none;
-      pointer-events: none;
-    }
-    .birthday-message h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.2em;
-      color: #ff4081;
-      margin-bottom: 0.45em;
-      text-shadow: 2px 2px #fff6fc, 0 9px 25px #f7aef8aa;
-      letter-spacing: 2px;
-      animation: wiggle 1.5s infinite;
-    }
-    .birthday-message p {
-      font-size: 1.18em;
-      color: #555;
-      background: rgba(255,255,255,0.85);
-      padding: 6px 18px;
-      border-radius: 9px;
-      display: inline-block;
-      text-shadow: 1px 1px #fff;
-      margin: 0 auto;
-      letter-spacing: 0.7px;
-      box-shadow: 0 2px 12px #fff9;
-    }
-    @keyframes wiggle {
-      0% { transform:translateY(0) scale(1) rotate(-2deg);}
-      15% { transform:scale(1.03) rotate(1.1deg);}
-      40% { transform:scale(1.06) rotate(-1.7deg);}
-      60% { transform:scale(1.03) rotate(2.2deg);}
-      100% { transform:translateY(0) scale(1) rotate(-2deg);}
-    }
-    @keyframes fadeIn { to { opacity: 1;} }
     @media (max-width:700px) {
       .falling-img { width: 52px; height: 52px; max-width: 30vw; max-height: 30vw;}
-      .birthday-message h1 { font-size: 1.2em; }
-      .birthday-message p { font-size: 1em;}
     }
-
     .final-msg {
       display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto;
       text-align: center; font-weight: bold; background: rgba(255,255,255,0.74);
@@ -139,7 +92,7 @@
   <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
   <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
 
-  <!-- Floating emojis (always present in DOM, toggle visibility via .floating-paused class) -->
+  <!-- Floating emoji layer (always present, show/hide as needed) -->
   <div id="emojiFloatLayer"></div>
 
   <div id="step1" class="section active">
@@ -178,16 +131,10 @@
         <button class="search-btn" id="searchBtn">Google Search</button>
       </form>
     </div>
-
     <div class="itsYou-wrap" id="youAnim"></div>
 
-    <!-- Falling images + message + quote (for 12s after "It's YOU") -->
     <div id="fallingBirthdaySection">
       <div class="falling-container" id="fallingContainer"></div>
-      <div class="birthday-message" id="fallingBirthdayMessage">
-        <h1>Happy Birthday Panda!</h1>
-        <p>A year older, a hundred times cuter! 🐼💗</p>
-      </div>
     </div>
   </div>
 
@@ -197,12 +144,12 @@
   </div>
 
   <script>
-    // ==== Floating emojis everywhere except images-falling ====
+    // Floating hearts/balloons
     const emojiFloatLayer = document.getElementById('emojiFloatLayer');
     const emojis = ["❤️","🎈"];
     let floatInterval = null;
     function startFloatingEmojis(){
-      if(floatInterval) return; // Already running
+      if(floatInterval) return;
       floatInterval = setInterval(()=>{
         createFloatEmoji();
       }, 600);
@@ -210,14 +157,12 @@
     function stopFloatingEmojis(){
       clearInterval(floatInterval);
       floatInterval = null;
-      // Hide all floating emojis instantly
       document.querySelectorAll('.floating').forEach(f=>f.classList.add('floating-paused'));
     }
     function resumeFloatingEmojis(){
       document.querySelectorAll('.floating').forEach(f=>f.classList.remove('floating-paused'));
       startFloatingEmojis();
     }
-
     function createFloatEmoji(){
       const f = document.createElement('div');
       f.className = 'floating';
@@ -230,7 +175,7 @@
     }
     startFloatingEmojis();
 
-    // ==== Login/flow logic (unchanged except new emoji logic) ====
+    // Login, UI logic
     const btn = document.getElementById('enterBtn');
     const input = document.getElementById('nameInput');
     const modal = document.getElementById('errorModal');
@@ -257,8 +202,7 @@
     function startStep2(){
       const evasBtn = document.getElementById('evasBtn');
       const wrap = document.querySelector('.evas-btn-wrap');
-      let moveTimes = 0;
-      const maxMoves = 5;
+      let moveTimes = 0, maxMoves = 5;
       function getRandomPosition() {
         const btnWidth = evasBtn.offsetWidth;
         const btnHeight = evasBtn.offsetHeight;
@@ -363,7 +307,6 @@
       }
     }
 
-    // "Google Search" action goes directly to "It's YOU!" (no video)
     document.getElementById("searchBtn").onclick = function() {
       document.getElementById("googleForm").classList.add("searching");
       setTimeout(()=>{
@@ -372,7 +315,7 @@
       },800);
     };
 
-    // "It's YOU!" animated floating messages, then falling birthday animation
+    // "It's YOU!" sequence, then falling birthday animation with balloon/heart pause
     function showItsYouAnim(){
       const youAnim = document.getElementById('youAnim');
       youAnim.innerHTML = "";
@@ -392,41 +335,24 @@
       },4000);
     }
 
-    // ==== Falling Images + Message After "It's YOU!" ====
+    // Falling panda images after It's YOU
     const imageUrls = [
-      "panda-images/panda1.jpeg",
-      "panda-images/panda2.jpeg",
-      "panda-images/panda3.jpeg",
-      "panda-images/panda4.jpg",
-      "panda-images/panda5.jpg",
-      "panda-images/panda6.jpg",
-      "panda-images/panda7.jpg",
-      "panda-images/panda10.jpg",
-      "panda-images/panda11.jpg",
-      "panda-images/panda12.jpg",
-      "panda-images/panda13.jpeg",
-      "panda-images/panda14.jpeg"
+      "panda-images/panda1.jpeg","panda-images/panda2.jpeg","panda-images/panda3.jpeg","panda-images/panda4.jpg",
+      "panda-images/panda5.jpg","panda-images/panda6.jpg","panda-images/panda7.jpg","panda-images/panda10.jpg",
+      "panda-images/panda11.jpg","panda-images/panda12.jpg","panda-images/panda13.jpeg","panda-images/panda14.jpeg"
     ];
     function showFallingBirthday() {
-      // Pause/hide floating emojis while images are falling
-      stopFloatingEmojis();
-
+      stopFloatingEmojis();  // Hide hearts and balloons
       const section = document.getElementById('fallingBirthdaySection');
-      section.style.display = 'block';
-      section.style.opacity = 0;
+      section.style.display = 'block'; section.style.opacity = 0;
       setTimeout(()=>{ section.style.transition = "opacity 1s"; section.style.opacity = 1; }, 20);
-
-      // create falling images
       const container = document.getElementById('fallingContainer');
       container.innerHTML = '';
       const totalImages = 36;
       for (let i = 0; i < totalImages; i++) {
         const randomIndex = Math.floor(Math.random() * imageUrls.length);
-        createFallingImage(imageUrls[randomIndex]);
-      }
-      function createFallingImage(url) {
         const img = document.createElement('img');
-        img.src = url;
+        img.src = imageUrls[randomIndex];
         img.className = 'falling-img';
         img.style.left = `${Math.random() * 95}vw`;
         img.style.animationDelay = `${Math.random() * 11.5}s`;
@@ -434,14 +360,12 @@
         img.style.transform = `rotate(${Math.random() * 360}deg)`;
         container.appendChild(img);
       }
-      // Show for 12s, then fade out and show final message
       setTimeout(()=>{
         section.style.transition = "opacity 0.9s";
         section.style.opacity = 0;
         setTimeout(()=>{
           section.style.display = "none";
           document.getElementById('finalMsg').style.display = 'block';
-          // Resume floating balloons/hearts if you want them after, or leave off for the final message
         }, 900);
       }, 12000);
     }
