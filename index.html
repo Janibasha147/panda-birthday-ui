@@ -8,15 +8,35 @@
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
 
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+.floating {
+  position: fixed;
+  bottom: -60px;
+  opacity: 0.9;
+  pointer-events: none;
+  animation-name: floatUp;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+  z-index: 9999;
+}
 
+@keyframes floatUp {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-110vh);
+    opacity: 0;
+  }
+}
+
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      background: #ffeefc; /* Keeping page bg consistent */
+      background: #ffeefc;
       min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
@@ -24,24 +44,19 @@
       position: relative;
       color: #da627d;
     }
-
-.birthday-text {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  font-weight: bold;
-  color: #ff4081;
-  text-shadow: 2px 2px 8px #000;
-  z-index: 9999;
-  pointer-events: none;
-}
-
-.hidden {
-  display: none;
-}
-
+    .birthday-text {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 3rem;
+      font-weight: bold;
+      color: #ff4081;
+      text-shadow: 2px 2px 8px #000;
+      z-index: 9999;
+      pointer-events: none;
+    }
+    .hidden { display: none; }
     .section { display: none; }
     .section.active { display: block; }
     .login-container { background: #fffafc; border: 2px solid #f7aef8; border-radius: 22px; padding: 2.5rem 2rem; max-width: 340px; width: 96vw; box-shadow: 0 8px 32px rgba(218,98,125,0.08); display: flex; flex-direction: column; align-items: center; position: relative; margin: 8vh auto 0 auto; z-index: 2; }
@@ -72,16 +87,13 @@
     .search-input { border:none; outline:none; font-size:1.08rem; width:240px; flex-grow:1; margin-right:10px;}
     .search-btn { background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-weight:bold; padding:9px 20px; font-size:1.07rem; cursor:pointer;}
     .search-btn:active { background:#ffd6fa;}
-    #videoSection {display:none; text-align:center; margin:30px auto;}
-    #videoPlaceholder { width:340px; height:190px; border-radius:13px; background:#f7aef8; display:flex; align-items:center; justify-content:center; color:#a844a2; font-size:1.15rem; margin:0 auto;}
-
     /* === Falling Images Animation Styles === */
     .falling-container {
       position: absolute;
       width: 100%;
       height: 100%;
       overflow: hidden;
-      z-index: 3; /* Above most, but behind message */
+      z-index: 3;
       pointer-events: none;
     }
     .falling-img {
@@ -93,16 +105,9 @@
       user-select: none;
     }
     @keyframes fall {
-      0% {
-        transform: translateY(-150px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(110vh) rotate(360deg);
-        opacity: 0;
-      }
+      0% { transform: translateY(-150px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
     }
-    /* Birthday message styling */
     .birthday-message {
       position: absolute;
       top: 50%;
@@ -114,28 +119,11 @@
       opacity: 0;
       max-width: 90vw;
       user-select: none;
+      display: none;
     }
-    .birthday-message h1 {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.5em;
-      color: #ff4081;
-      margin-bottom: 0.5em;
-      text-shadow: 2px 2px #fff;
-    }
-    .birthday-message p {
-      font-size: 1.2em;
-      color: #444;
-      text-shadow: 1px 1px #fff;
-    }
-    @keyframes fadeIn {
-      to { opacity: 1; }
-    }
-
-    /* Hide original floating balloons and hearts */
-    .floating {
-      display: none!important;
-    }
-
+    .birthday-message h1 { font-family: 'Pacifico', cursive; font-size: 2.5em; color: #ff4081; margin-bottom: 0.5em; text-shadow: 2px 2px #fff; }
+    .birthday-message p { font-size: 1.2em; color: #444; text-shadow: 1px 1px #fff; }
+    @keyframes fadeIn { to { opacity: 1; } }
     .final-msg { display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto; text-align: center; font-weight: bold; background: rgba(255,255,255,0.74); border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem; box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;}
     .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px;}
     .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97; }
@@ -143,9 +131,8 @@
   </style>
 </head>
 <body>
-  <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
-  <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
-
+  <!-- Place your floating balloons/hearts elements below. Example: -->
+  <!-- <div class="floating">🎈</div> -->
   <div id="step1" class="section active">
     <div class="login-container">
       <div class="input-row">
@@ -162,19 +149,15 @@
       </div>
     </div>
   </div>
-
   <div id="step2" class="section">
     <div class="centered">
       <div class="main-msg" id="mainMsg">Do You Know What's the greatest things happened on August 8? </div>
       <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px;">
-        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%);">
-          Click here to know
-        </button>
+        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%);">Click here to know</button>
       </div>
       <div class="typing-area" id="typingArea" style="display:none;"></div>
       <div class="fade-message" id="aug8Best" style="display:none;">Do You Know What's the greatest things happened on August 8? </div>
     </div>
-
     <div id="searchSection">
       <form id="googleForm" class="search-box" onsubmit="return false;">
         <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="23" style="margin-right:7px;" />
@@ -182,33 +165,20 @@
         <button class="search-btn" id="searchBtn">Google Search</button>
       </form>
     </div>
-
-    <div id="videoSection">
-      <div id="videoPlaceholder">[ 3-sec Surprise Video Here Soon! ]</div>
-    </div>
-
     <div class="itsYou-wrap" id="youAnim"></div>
-
-    <!-- Falling images container added right after "It's YOU" animation -->
     <div class="falling-container" id="fallingContainer"></div>
-
-    <!-- Birthday message centered above falling images (higher z-index) -->
-    <div class="birthday-message" id="fallingBirthdayMessage">
-      <h1>Happy Birthday Panda!</h1>
-      <p>Happy Birthday Panda 🎉🎈</p>
-    </div>
-
-  </div>
-
-  <div class="final-msg" id="finalMsg" style="display:none;">
-    "Have a beautiful birthday full of smiles, laughter, and love"
- <span class="heart">🐼💖</span>
-    <span class="quote">— The world is lucky to have you.</span>
-  </div>
-
+    <div class="birthday-message" id="birthdayMessage" style="display:none;">
+<h1>Happy Birthday, Panda! 🐼🎂</h1>
+<p>Wishing you a day filled with joy, surprises, and unforgettable memories! 🎉💖</p>
+</div>
+</div>
+<div class="final-msg" id="finalMsg" style="display:none;">
+  "May your heart be as full as your cake and your year as sweet as your smile."
+  <span class="heart">🎂💫</span>
+  <span class="quote">— You truly make the world brighter, just by being in it.</span>
+</div>
   <script>
     // ==== Core UI flow scripts ====
-
     const btn = document.getElementById('enterBtn');
     const input = document.getElementById('nameInput');
     const modal = document.getElementById('errorModal');
@@ -220,10 +190,10 @@
       const val = input.value.trim().toLowerCase();
       if(val === "panda") {
         welcome.style.display = 'block';
-        document.getElementById('bgMusic').play().catch(()=>{});
         setTimeout(()=>{
           step1.classList.remove('active');
           step2.classList.add('active');
+          showFloating();
           startStep2();
         }, 4000);
       } else {
@@ -231,10 +201,15 @@
       }
     };
     input.addEventListener("keyup", function(e) { if (e.key === "Enter") btn.click(); });
-
-    // Removed balloons & hearts to comply with new animation style
-
+    // Floating balloons/hearts show/hide functions
+    function showFloating() {
+      document.querySelectorAll('.floating').forEach(el => el.style.display = '');
+    }
+    function hideFloating() {
+      document.querySelectorAll('.floating').forEach(el => el.style.display = 'none');
+    }
     function startStep2(){
+      showFloating();
       const evasBtn = document.getElementById('evasBtn');
       const wrap = document.querySelector('.evas-btn-wrap');
       let moveTimes = 0;
@@ -282,21 +257,21 @@
 <b>based on historical records, these are all the disasters that happend on 8th August.</b><br>
 <br>
 <b>Natural Disasters</b><br>
-<span style="color:#d14d72;">&#8226;</span> <b>2023 Maui Wildfires, United States</b>: The devastating series of wildfires on the Hawaiian island of Maui began on August 8, 2023.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>2010 Gansu Mudslide, China</b>: A massive and deadly mudslide struck Zhouqu County in the Gansu province during the night of August 8, 2010.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>1993 Guam Earthquake</b>: A powerful earthquake with a magnitude of 7.8 struck the island of Guam on the evening of August 8, 1993.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>1975 Banqiao Dam Collapse, China</b>: Triggered by Typhoon Nina, the Banqiao Dam and numerous other dams in the region failed in the early morning hours of August 8, 1975.<br>
-<br>
-<b>Accidents and Human-Caused Disasters</b><br>
-<span style="color:#a844a2;">&#8226;</span> <b>2019 Missile Test Explosion, Russia</b>: An explosion at a military test site near Nyonoksa, resulting in a radiation spike, occurred on August 8, 2019.<br>
-<span style="color:#a844a2;">&#8226;</span> <b>2009 Hudson River Mid-air Collision, United States</b>: A tour helicopter and a private plane collided over the Hudson River, killing nine people on August 8, 2009.<br>
-<br>
-<b>Terrorism and Violent Conflicts</b><br>
-<span style="color:#8a2be2;">&#8226;</span> <b>2016 Hospital Attack, Pakistan</b>: A suicide bomber targeted the emergency ward of a government hospital in Quetta on August 8, 2016, killing at least 70 people.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>2013 Funeral Bombing, Pakistan</b>: A suicide bomber attacked a funeral for a police officer in Quetta on August 8, 2013.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1998 Consulate Raid, Afghanistan</b>: The raid by the Taliban on the Iranian consulate in Mazar-i-Sharif, resulting in the death of diplomats and a journalist, took place on August 8, 1998.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1988 Pro-Democracy Uprising, Myanmar</b>: The 8888 Uprising, a nationwide protest for democracy, was named for its start date of August 8, 1988.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1945 Soviet Declaration of War, WWII</b>: The Soviet Union officially declared war on the Empire of Japan on August 8, 1945, and commenced its invasion of Manchuria."<br>
+<span style="color:#d14d72;">&#8226;</span> <b>2023 Maui Wildfires (USA)</b>: Major wildfires hit Maui on August 8, 2023.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>2010 Gansu Mudslide (China)</b>: A deadly mudslide struck Gansu province on August 8, 2010.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>1993 Guam Earthquake</b>: A 7.8 magnitude quake hit Guam on August 8, 1993.<br>
+<span style="color:#d14d72;">&#8226;</span> <b>1975 Banqiao Dam Collapse (China)</b>: Typhoon Nina caused massive dam failures on August 8, 1975.<br>
+
+<br><b>Accidents & Disasters</b><br>
+<span style="color:#a844a2;">&#8226;</span> <b>2019 Russia Missile Blast</b>: A missile test caused an explosion and radiation spike on August 8, 2019.<br>
+<span style="color:#a844a2;">&#8226;</span> <b>2009 Hudson Collision (USA)</b>: A plane and helicopter crash killed 9 over the Hudson River on August 8, 2009.<br>
+
+<br><b>Conflicts & Terror Attacks</b><br>
+<span style="color:#8a2be2;">&#8226;</span> <b>2016 Quetta Hospital Bombing (Pakistan)</b>: A suicide blast killed 70 on August 8, 2016.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>2013 Funeral Attack (Pakistan)</b>: A bombing at a police officer’s funeral occurred on August 8, 2013.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1998 Consulate Raid (Afghanistan)</b>: Taliban killed diplomats at the Iranian consulate on August 8, 1998.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1988 Myanmar Uprising</b>: Pro-democracy protests started on August 8, 1988.<br>
+<span style="color:#8a2be2;">&#8226;</span> <b>1945 Soviet War Declaration</b>: USSR declared war on Japan on August 8, 1945.<br>
         `;
         let i = 0, speed=19;
         const el=document.getElementById('typingArea');
@@ -342,24 +317,13 @@
         typeQ();
       }
     }
-
     document.getElementById("searchBtn").onclick = function() {
       document.getElementById("googleForm").classList.add("searching");
-      document.getElementById("searchInput");
       setTimeout(()=>{
         document.getElementById("searchSection").style.display='none';
-        showVideoSection();
+        showItsYouAnim();
       },800);
     };
-
-    function showVideoSection() {
-      document.getElementById("videoSection").style.display = "block";
-      setTimeout(()=>{
-        document.getElementById("videoSection").style.display = "none";
-        showItsYouAnim();
-      },3300);
-    }
-
     function showItsYouAnim(){
       const youAnim = document.getElementById('youAnim');
       youAnim.innerHTML = "";
@@ -375,54 +339,71 @@
       });
       setTimeout(()=>{
         youAnim.style.display='none';
-        // Show falling images animation and birthday message after "It's You!"
         startFallingImagesAnimation();
       },4000);
     }
-
     // ========= Falling Images Birthday Animation =========
-    const imageUrls = [
-      "panda-images/panda1.jpeg",
-      "panda-images/panda2.jpeg",
-      "panda-images/panda3.jpeg",
-      "panda-images/panda4.jpg",
-      "panda-images/panda5.jpg",
-      "panda-images/panda6.jpg",
-      "panda-images/panda7.jpg",
-      "panda-images/panda10.jpg",
-      "panda-images/panda11.jpg",
-      "panda-images/panda12.jpg",
-      "panda-images/panda13.jpeg",
-      "panda-images/panda14.jpeg"
-    ];
-
     function startFallingImagesAnimation() {
-
-      document.getElementById("birthdayMessage").classList.remove("hidden");
-
+      hideFloating();
+      const birthdayMessage = document.getElementById('birthdayMessage');
+      birthdayMessage.style.opacity = 1;
+      birthdayMessage.style.display = 'block';
       const container = document.getElementById('fallingContainer');
-      container.innerHTML = ''; // Clear if rerun
-      const totalImages = 40; // Number of simultaneous falling images
-      
+      container.innerHTML = '';
+      const totalImages = 40;
+      const imageUrls = [
+        "panda-images/panda1.jpeg",
+        "panda-images/panda2.jpeg",
+        "panda-images/panda3.jpeg",
+        "panda-images/panda4.jpg",
+        "panda-images/panda5.jpg",
+        "panda-images/panda6.jpg",
+        "panda-images/panda7.jpg",
+        "panda-images/panda10.jpg",
+        "panda-images/panda11.jpg",
+        "panda-images/panda12.jpg",
+        "panda-images/panda13.jpeg",
+        "panda-images/panda14.jpeg"
+      ];
       for (let i = 0; i < totalImages; i++) {
         const randomIndex = Math.floor(Math.random() * imageUrls.length);
-        createFallingImage(imageUrls[randomIndex]);
-      }
-
-      function createFallingImage(url) {
         const img = document.createElement('img');
-        img.src = url;
+        img.src = imageUrls[randomIndex];
         img.className = 'falling-img';
         img.style.left = `${Math.random() * 100}vw`;
         img.style.animationDelay = `${Math.random() * 12}s`;
-        img.style.animationDuration = 12 + Math.random() * 5 + 's'; // 12-17s falling speed
+        img.style.animationDuration = 12 + Math.random() * 5 + 's';
         img.style.transform = `rotate(${Math.random() * 360}deg)`;
         container.appendChild(img);
       }
-  setTimeout(() => {
-    document.getElementById("birthdayMessage").classList.add("hidden");
-  }, 12000);
+      setTimeout(() => {
+        birthdayMessage.style.opacity = 0;
+        birthdayMessage.style.display = 'none';
+        showFloating();
+      }, 12000);
     }
+    // show floating on load
+    showFloating();
   </script>
+
+<script>
+  const emojis = ["❤️", "🎈"];
+  function createFloat() {
+    const f = document.createElement('div');
+    f.className = 'floating';
+    f.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+    f.style.left = Math.floor(Math.random() * 92) + 'vw';
+    f.style.fontSize = (2 + Math.random() * 2.1) + 'rem';
+    f.style.animationDuration = (5 + Math.random() * 3.2) + 's';
+    document.body.appendChild(f);
+    setTimeout(() => { f.remove(); }, 9000);
+  }
+  setInterval(createFloat, 600);
+</script>
+
+</body>
+</html>
+
+
 </body>
 </html>
