@@ -5,138 +5,180 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Panda Birthday Surprise</title>
   <link href="https://fonts.googleapis.com/css?family=Segoe+UI:400,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      background: #ffeefc;
+      background: #ffeefc; /* Keeping page bg consistent */
       min-height: 100vh;
       margin: 0;
       font-family: 'Segoe UI', Arial, sans-serif;
       overflow-x: hidden;
+      position: relative;
+      color: #da627d;
     }
     .section { display: none; }
     .section.active { display: block; }
+    .login-container { background: #fffafc; border: 2px solid #f7aef8; border-radius: 22px; padding: 2.5rem 2rem; max-width: 340px; width: 96vw; box-shadow: 0 8px 32px rgba(218,98,125,0.08); display: flex; flex-direction: column; align-items: center; position: relative; margin: 8vh auto 0 auto; z-index: 2; }
+    .input-row { display: flex; align-items: center; width: 100%; gap: 10px; margin-bottom: 1.5rem; }
+    .panda-icon { width: 38px; height: 38px;}
+    #nameInput { flex: 1 1 0; padding: 0.72rem 1rem; border: 1.4px solid #f7aef8; border-radius: 8px; font-size: 1rem; background: #fff7fb; color: #da627d; transition: border 0.2s; outline: none;}
+    #nameInput:focus { border: 2px solid #da627d; }
+    #enterBtn { width: 100%; padding: 0.75rem 0; margin-top: 0.5rem; background: #f7aef8; color: #da627d; border: none; border-radius: 8px; font-size: 1.15rem; font-weight: bold; cursor: pointer; box-shadow: 0 2px 8px rgba(218,98,125,0.08); transition: background 0.18s, transform 0.11s; }
+    #enterBtn:hover, #enterBtn:focus { background: #ffd6fa; transform: translateY(-2px) scale(1.03); }
+    .welcome { display: none; font-size: 1.11rem; color: #da627d; margin-top: 1.35rem; text-align: center; font-weight: bold; letter-spacing: 0.2px;}
+    .modal { display: none; position: fixed; left:0; top:0; right:0; bottom:0; align-items: center; justify-content: center; background: rgba(247,174,248,0.19); z-index: 100; }
+    .modal-content { background: #fff0f8; border-radius: 14px; padding: 1.1rem 1.2rem 0.7rem 1.2rem; min-width: 220px; border: 1px solid #f7aef8; box-shadow: 0 4px 24px rgba(218,98,125,0.09); text-align: center; transform: scale(1.1); animation: pop 0.21s;}
+    @keyframes pop { 0%{transform:scale(0.88);} 100%{transform:scale(1.1);} }
+    #wrongText { color: #da627d; font-weight: 700; font-size: 1.04rem; letter-spacing: 0.6px; }
+    .modal-small-text { color: #a844a2; font-size: 0.66rem; margin-top: 0.32rem; font-style: italic; opacity:0.9;}
+    .centered { text-align: center; margin-top: 4.5vh; }
+    .main-msg { font-size: 1.3rem; color: #a844a2; font-weight: 700; margin: 2.2rem auto 2.1rem auto; font-family: inherit; }
+    .evas-btn-wrap { position: relative!important; height: 70px; margin-bottom: 2.3rem; min-width:180px;}
+    #evasBtn { position: absolute; left: 50%; top: 0; transform: translateX(-50%); background: #f7aef8; color: #da627d; border: none; border-radius: 14px; font-size: 1.09rem; font-weight: bold; padding: 0.88rem 2.1rem; box-shadow: 0 2px 12px rgba(138,43,226,0.09); cursor: pointer; transition: background 0.2s, transform 0.19s; z-index: 2; }
+    #evasBtn:hover, #evasBtn:focus { background: #ffd6fa; }
+    .typing-area { font-size: 1.11rem; color: #d14d72; background: rgba(255,255,255,0.72); border-radius: 18px; max-width: 540px; margin: 0 auto; padding: 1.4rem 1.1rem; line-height: 1.7; font-family: inherit; min-height: 180px; text-align: left; box-shadow: 0 4px 22px rgba(218,98,125,0.05);}
+    .fade-message { opacity: 0; font-size: 1.2rem; color: #a844a2; margin-top: 2rem; font-weight: 600; transition: opacity 0.8s;}
+    .itsYou-wrap { position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 10; overflow: hidden; display: none;}
+    .itsYou { position: absolute; white-space: nowrap; font-size: 2.6rem; font-weight: bold; color: #8a2be2; opacity: 0.9; animation: youMove 4s linear infinite; text-shadow: 0 1px 7px #f7aef8; font-family: inherit; }
+    @keyframes youMove { 0% { left: -15vw;} 100% { left: 110vw;} }
+    #searchSection {display:none; justify-content: center; align-items:center; margin-top: 40px;}
+    .search-box { background: #fff; border-radius:28px; box-shadow:0 2px 16px rgba(100,0,155,0.10); padding:16px 20px; min-width:300px; max-width:90vw; display: flex; align-items: center;}
+    .search-input { border:none; outline:none; font-size:1.08rem; width:240px; flex-grow:1; margin-right:10px;}
+    .search-btn { background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-weight:bold; padding:9px 20px; font-size:1.07rem; cursor:pointer;}
+    .search-btn:active { background:#ffd6fa;}
+    #videoSection {display:none; text-align:center; margin:30px auto;}
+    #videoPlaceholder { width:340px; height:190px; border-radius:13px; background:#f7aef8; display:flex; align-items:center; justify-content:center; color:#a844a2; font-size:1.15rem; margin:0 auto;}
 
-    /* Floating hearts and balloons */
-    .floating {
-      position: fixed;
-      bottom: -40px;
-      font-size: 2.3rem;
-      animation: floatUp 6.5s linear infinite;
-      z-index: 40;
-      user-select: none;
-      pointer-events: none;
-      opacity: 0.61;
-      left: 0;
-      transition: opacity 0.4s;
-    }
-    .floating-paused { display: none !important; }
-    @keyframes floatUp {
-      0% { transform: translateY(0) scale(1); }
-      83% { opacity: 0.81; }
-      100% { transform: translateY(-110vh) scale(1.20); opacity: 0.17; }
-    }
-
-    /* Falling images animation (no greeting overlay) */
-    #fallingBirthdaySection {
-      position: fixed;
-      left: 0; top: 0;
-      width: 100vw; height: 100vh;
-      background: linear-gradient(to bottom, #fff0f5, #ffe4e1);
-      z-index: 99;
-      display: none;
-      overflow: hidden;
-    }
+    /* === Falling Images Animation Styles === */
     .falling-container {
-      position: absolute; width: 100%; height: 100%;
-      overflow: hidden; top: 0; left: 0; z-index: 2; pointer-events: none;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 3; /* Above most, but behind message */
+      pointer-events: none;
     }
     .falling-img {
       position: absolute;
-      width: 90px; height: 90px;
-      max-width: 20vw; max-height: 20vw;
-      object-fit: cover;
-      border-radius: 16px;
-      box-shadow: 0 3px 16px #e0bbec44;
+      width: 90px;
+      height: auto;
       animation: fall 12s linear infinite;
       will-change: transform, opacity;
       user-select: none;
-      pointer-events: none;
     }
     @keyframes fall {
-      0% { transform: translateY(-120px) rotate(0deg); opacity: 1; }
-      95%{ opacity: 1;}
-      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+      0% {
+        transform: translateY(-150px) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
     }
-    @media (max-width:700px) {
-      .falling-img { width: 52px; height: 52px; max-width: 30vw; max-height: 30vw;}
+    /* Birthday message styling */
+    .birthday-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: 5;
+      animation: fadeIn 2s ease-in-out 1s forwards;
+      opacity: 0;
+      max-width: 90vw;
+      user-select: none;
+    }
+    .birthday-message h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5em;
+      color: #ff4081;
+      margin-bottom: 0.5em;
+      text-shadow: 2px 2px #fff;
+    }
+    .birthday-message p {
+      font-size: 1.2em;
+      color: #444;
+      text-shadow: 1px 1px #fff;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
     }
 
-    .final-msg {
-      display: none;
-      font-size: 1.31rem;
-      color: #d14d72;
-      margin: 2.5rem auto 0 auto;
-      text-align: center;
-      font-weight: bold;
-      background: rgba(255,255,255,0.74);
-      border-radius: 18px;
-      max-width: 430px;
-      padding: 1.3rem 1rem 1.1rem 1rem;
-      box-shadow: 0 3px 16px rgba(168,68,162,0.10);
-      line-height: 1.7;
+    /* Hide original floating balloons and hearts */
+    .floating {
+      display: none!important;
     }
-    .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px; }
+
+    .final-msg { display: none; font-size: 1.31rem; color: #d14d72; margin: 2.5rem auto 0 auto; text-align: center; font-weight: bold; background: rgba(255,255,255,0.74); border-radius: 18px; max-width: 430px; padding: 1.3rem 1rem 1.1rem 1rem; box-shadow: 0 3px 16px rgba(168,68,162,0.10); line-height: 1.7;}
+    .final-msg .heart { font-size: 1.45em; color: #d14d72; margin: 0 2px;}
     .final-msg .quote { display: block; font-size: 1.08em; color: #8a2be2; margin-top: 1.12rem; font-style: italic; opacity: 0.97; }
+    @media (max-width: 700px) { .evas-btn-wrap { width: 96vw; min-height: 55px; } #evasBtn { font-size: 1rem; padding: 0.7rem 1.2rem; } }
   </style>
 </head>
 <body>
   <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2022/12/19/audio_12d4f789a7.mp3" loop></audio>
+  <audio id="bdMusic" src="https://cdn.pixabay.com/audio/2022/10/16/audio_123b412d94.mp3"></audio>
 
-  <!-- Floating emoji layer -->
-  <div id="emojiFloatLayer"></div>
-
-  <!-- Login -->
   <div id="step1" class="section active">
-    <div class="login-container" style="background:#fffafc; border:2px solid #f7aef8; border-radius:22px; padding:2.5rem 2rem; max-width:340px; width:96vw; box-shadow:0 8px 32px rgba(218,98,125,0.08); display: flex; flex-direction:column; align-items:center; position:relative; margin:8vh auto 0 auto; z-index:2;">
-      <div class="input-row" style="display:flex; align-items:center; width:100%; gap:10px; margin-bottom:1.5rem;">
-        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" style="width:38px;height:38px;"/>
-        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" style="flex:1 1 0; padding:0.72rem 1rem; border:1.4px solid #f7aef8; border-radius:8px; font-size:1rem; background:#fff7fb; color:#da627d;"/>
+    <div class="login-container">
+      <div class="input-row">
+        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
+        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" />
       </div>
-      <button id="enterBtn" style="width:100%; padding:0.75rem 0; margin-top:0.5rem; background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-size:1.15rem; font-weight:bold; cursor:pointer; box-shadow:0 2px 8px rgba(218,98,125,0.08);">Enter</button>
-      <div class="welcome" id="welcomeMsg" style="display:none;font-size:1.11rem;color:#da627d;margin-top:1.35rem;text-align:center;font-weight:bold;letter-spacing:0.2px;">Welcome, bestie! Redirecting... 🎈</div>
-      <div id="errorModal" class="modal" style="display:none;position:fixed;left:0;top:0;right:0;bottom:0;align-items:center;justify-content:center;background:rgba(247,174,248,0.19);z-index:100;">
-        <div class="modal-content" onclick="event.stopPropagation();" style="background:#fff0f8;border-radius:14px;padding:1.1rem 1.2rem 0.7rem 1.2rem;min-width:220px;border:1px solid #f7aef8;box-shadow:0 4px 24px rgba(218,98,125,0.09);text-align:center;transform:scale(1.1);">
-          <span id="wrongText" style="color:#da627d; font-weight:700; font-size:1.04rem; letter-spacing:0.6px;">It's a wrong input</span>
-          <div class="modal-small-text" style="color:#a844a2; font-size:0.66rem; margin-top:0.32rem; font-style:italic; opacity:0.9;">baga alochinchu</div>
+      <button id="enterBtn">Enter</button>
+      <div class="welcome" id="welcomeMsg">Welcome, bestie! Redirecting... 🎈</div>
+      <div id="errorModal" class="modal">
+        <div class="modal-content" onclick="event.stopPropagation();">
+          <span id="wrongText">It's a wrong input</span>
+          <div class="modal-small-text">baga alochinchu</div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Main content -->
   <div id="step2" class="section">
-    <div class="centered" style="text-align:center; margin-top:4.5vh;">
+    <div class="centered">
       <div class="main-msg" id="mainMsg">Do You Know What's the greatest things happened on August 8? </div>
-      <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px; margin-bottom:2.3rem;">
-        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%); background:#f7aef8; color:#da627d; border:none; border-radius:14px; font-size:1.09rem; font-weight:bold; padding:0.88rem 2.1rem; box-shadow:0 2px 12px rgba(138,43,226,0.09);">Click here to know</button>
+      <div class="evas-btn-wrap" style="position:relative; height:70px; min-width:200px;">
+        <button id="evasBtn" style="position:absolute; left:50%; top:0; transform:translateX(-50%);">
+          Click here to know
+        </button>
       </div>
       <div class="typing-area" id="typingArea" style="display:none;"></div>
       <div class="fade-message" id="aug8Best" style="display:none;">Do You Know What's the greatest things happened on August 8? </div>
     </div>
 
     <div id="searchSection">
-      <form id="googleForm" class="search-box" onsubmit="return false;" style="background:#fff; border-radius:28px; box-shadow:0 2px 16px rgba(100,0,155,0.10); padding:16px 20px; min-width:300px; max-width:90vw; display: flex; align-items: center;">
+      <form id="googleForm" class="search-box" onsubmit="return false;">
         <img src="https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico" width="23" style="margin-right:7px;" />
-        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google" style="border:none;outline:none;font-size:1.08rem;width:240px;flex-grow:1;margin-right:10px;"/>
-        <button class="search-btn" id="searchBtn" style="background:#f7aef8; color:#da627d; border:none; border-radius:8px; font-weight:bold; padding:9px 20px; font-size:1.07rem; cursor:pointer;">Google Search</button>
+        <input class="search-input" id="googleQuery" autocomplete="off" placeholder="Search Google"/>
+        <button class="search-btn" id="searchBtn">Google Search</button>
       </form>
     </div>
+
+    <div id="videoSection">
+      <div id="videoPlaceholder">[ 3-sec Surprise Video Here Soon! ]</div>
+    </div>
+
     <div class="itsYou-wrap" id="youAnim"></div>
 
-    <!-- Falling panda images only -->
-    <div id="fallingBirthdaySection">
-      <div class="falling-container" id="fallingContainer"></div>
+    <!-- Falling images container added right after "It's YOU" animation -->
+    <div class="falling-container" id="fallingContainer"></div>
+
+    <!-- Birthday message centered above falling images (higher z-index) -->
+    <div class="birthday-message" id="fallingBirthdayMessage">
+      <h1>Happy Birthday Panda!</h1>
+      <p>Wishing you a day full of sweet surprises and joy! 🎉🎈</p>
     </div>
+
   </div>
 
   <div class="final-msg" id="finalMsg" style="display:none;">
@@ -145,38 +187,8 @@
   </div>
 
   <script>
-    // Floating hearts/balloons logic
-    const emojiFloatLayer = document.getElementById('emojiFloatLayer');
-    const emojis = ["❤️","🎈"];
-    let floatInterval = null;
-    function startFloatingEmojis(){
-      if(floatInterval) return;
-      floatInterval = setInterval(()=>{
-        createFloatEmoji();
-      }, 600);
-    }
-    function stopFloatingEmojis(){
-      clearInterval(floatInterval);
-      floatInterval = null;
-      document.querySelectorAll('.floating').forEach(f=>f.classList.add('floating-paused'));
-    }
-    function resumeFloatingEmojis(){
-      document.querySelectorAll('.floating').forEach(f=>f.classList.remove('floating-paused'));
-      startFloatingEmojis();
-    }
-    function createFloatEmoji(){
-      const f = document.createElement('div');
-      f.className = 'floating';
-      f.innerText = emojis[Math.floor(Math.random()*emojis.length)];
-      f.style.left = Math.floor(Math.random()*92) + 'vw';
-      f.style.fontSize = (2 + Math.random()*2.1) + 'rem';
-      f.style.animationDuration = (5 + Math.random()*3.2) + 's';
-      emojiFloatLayer.appendChild(f);
-      setTimeout(()=>{ if(f && f.parentNode) f.remove(); }, 9000);
-    }
-    startFloatingEmojis();
+    // ==== Core UI flow scripts ====
 
-    // Login/typing/animation flow (unchanged except new emoji hiding logic)
     const btn = document.getElementById('enterBtn');
     const input = document.getElementById('nameInput');
     const modal = document.getElementById('errorModal');
@@ -200,10 +212,13 @@
     };
     input.addEventListener("keyup", function(e) { if (e.key === "Enter") btn.click(); });
 
+    // Removed balloons & hearts to comply with new animation style
+
     function startStep2(){
       const evasBtn = document.getElementById('evasBtn');
       const wrap = document.querySelector('.evas-btn-wrap');
-      let moveTimes = 0, maxMoves = 5;
+      let moveTimes = 0;
+      const maxMoves = 5;
       function getRandomPosition() {
         const btnWidth = evasBtn.offsetWidth;
         const btnHeight = evasBtn.offsetHeight;
@@ -310,13 +325,21 @@
 
     document.getElementById("searchBtn").onclick = function() {
       document.getElementById("googleForm").classList.add("searching");
+      document.getElementById("searchInput");
       setTimeout(()=>{
         document.getElementById("searchSection").style.display='none';
-        showItsYouAnim();
+        showVideoSection();
       },800);
     };
 
-    // "It's YOU!" sequence, then falling birthday animation with balloon/heart pause
+    function showVideoSection() {
+      document.getElementById("videoSection").style.display = "block";
+      setTimeout(()=>{
+        document.getElementById("videoSection").style.display = "none";
+        showItsYouAnim();
+      },3300);
+    }
+
     function showItsYouAnim(){
       const youAnim = document.getElementById('youAnim');
       youAnim.innerHTML = "";
@@ -332,44 +355,47 @@
       });
       setTimeout(()=>{
         youAnim.style.display='none';
-        showFallingBirthday();
+        // Show falling images animation and birthday message after "It's You!"
+        startFallingImagesAnimation();
       },4000);
     }
 
-    // Falling panda images after It's YOU
+    // ========= Falling Images Birthday Animation =========
     const imageUrls = [
-      "panda-images/panda1.jpeg","panda-images/panda2.jpeg","panda-images/panda3.jpeg","panda-images/panda4.jpg",
-      "panda-images/panda5.jpg","panda-images/panda6.jpg","panda-images/panda7.jpg","panda-images/panda10.jpg",
-      "panda-images/panda11.jpg","panda-images/panda12.jpg","panda-images/panda13.jpeg","panda-images/panda14.jpeg"
+      "panda-images/panda1.jpeg",
+      "panda-images/panda2.jpeg",
+      "panda-images/panda3.jpeg",
+      "panda-images/panda4.jpg",
+      "panda-images/panda5.jpg",
+      "panda-images/panda6.jpg",
+      "panda-images/panda7.jpg",
+      "panda-images/panda10.jpg",
+      "panda-images/panda11.jpg",
+      "panda-images/panda12.jpg",
+      "panda-images/panda13.jpeg",
+      "panda-images/panda14.jpeg"
     ];
-    function showFallingBirthday() {
-      stopFloatingEmojis();  // Hide hearts and balloons
-      const section = document.getElementById('fallingBirthdaySection');
-      section.style.display = 'block'; section.style.opacity = 0;
-      setTimeout(()=>{ section.style.transition = "opacity 1s"; section.style.opacity = 1; }, 20);
+
+    function startFallingImagesAnimation() {
       const container = document.getElementById('fallingContainer');
-      container.innerHTML = '';
-      const totalImages = 36;
+      container.innerHTML = ''; // Clear if rerun
+      const totalImages = 40; // Number of simultaneous falling images
+      
       for (let i = 0; i < totalImages; i++) {
         const randomIndex = Math.floor(Math.random() * imageUrls.length);
+        createFallingImage(imageUrls[randomIndex]);
+      }
+
+      function createFallingImage(url) {
         const img = document.createElement('img');
-        img.src = imageUrls[randomIndex];
+        img.src = url;
         img.className = 'falling-img';
-        img.style.left = `${Math.random() * 95}vw`;
-        img.style.animationDelay = `${Math.random() * 11.5}s`;
-        img.style.animationDuration = 11 + Math.random() * 2.5 + 's';
+        img.style.left = `${Math.random() * 100}vw`;
+        img.style.animationDelay = `${Math.random() * 12}s`;
+        img.style.animationDuration = 12 + Math.random() * 5 + 's'; // 12-17s falling speed
         img.style.transform = `rotate(${Math.random() * 360}deg)`;
         container.appendChild(img);
       }
-      setTimeout(()=>{
-        section.style.transition = "opacity 0.9s";
-        section.style.opacity = 0;
-        setTimeout(()=>{
-          section.style.display = "none";
-          document.getElementById('finalMsg').style.display = 'block';
-          // Optionally, you could call resumeFloatingEmojis() here to bring them back for the final message.
-        }, 900);
-      }, 12000);
     }
   </script>
 </body>
