@@ -131,6 +131,11 @@
   </style>
 </head>
 <body>
+
+<audio id="bgMusic" preload="auto" loop style="display:none;">
+  <source src="panda-images/happy-birthday.mp3" type="audio/mpeg" />
+</audio>
+
   <!-- Place your floating balloons/hearts elements below. Example: -->
   <!-- <div class="floating">🎈</div> -->
   <div id="step1" class="section active">
@@ -399,6 +404,35 @@
     setTimeout(() => { f.remove(); }, 9000);
   }
   setInterval(createFloat, 600);
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const bgMusic = document.getElementById('bgMusic');
+
+    function startMusicOnce() {
+      if (bgMusic && bgMusic.paused) {
+        bgMusic.volume = 0.6;  // Set desired volume level
+        bgMusic.play().catch(() => {});
+      }
+      // Remove these listeners after first interaction to avoid repeated plays
+      document.removeEventListener('click', startMusicOnce);
+      document.removeEventListener('touchstart', startMusicOnce);
+      document.removeEventListener('keydown', startMusicOnce);
+    }
+
+    // Play music on first user interaction anywhere on page
+    document.addEventListener('click', startMusicOnce);
+    document.addEventListener('touchstart', startMusicOnce);
+    document.addEventListener('keydown', startMusicOnce);
+
+    // Also play music immediately on your Enter button click
+    const enterBtn = document.getElementById('enterBtn');
+    if (enterBtn) {
+      enterBtn.addEventListener('click', startMusicOnce, { once: true });
+    }
+  });
 </script>
 
 </body>
