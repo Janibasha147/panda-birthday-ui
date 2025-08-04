@@ -139,16 +139,20 @@
   <!-- <div class="floating">🎈</div> -->
   <div id="step1" class="section active">
     <div class="login-container">
-      <div class="input-row">
-        <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
-        <input type="text" id="nameInput" placeholder="Please Enter Your Name Beautiful" autocomplete="off" />
-      </div>
+<div class="input-row" style="flex-direction: column; align-items: flex-start; gap: 6px;">
+  <label for="nameInput" style="color: #a844a2; font-weight: 500;">    Please Enter Your Name Beautiful</label>
+  <div style="display: flex; align-items: center; gap: 10px; width: 100%;">
+    <img class="panda-icon" src="https://img.icons8.com/cute-clipart/64/000000/panda.png" alt="Panda Icon" />
+    <input type="text" id="nameInput" placeholder="Tumhara Peru Type karo 😊" autocomplete="off" />
+  </div>
+</div>
+
       <button id="enterBtn">Enter</button>
       <div class="welcome" id="welcomeMsg">Welcome, bestie! Redirecting... 🎈</div>
       <div id="errorModal" class="modal">
         <div class="modal-content" onclick="event.stopPropagation();">
           <span id="wrongText">It's a wrong input</span>
-          <div class="modal-small-text">baga alochinchu</div>
+          <div class="modal-small-text">baga alochinchi type karo😜</div>
         </div>
       </div>
     </div>
@@ -448,6 +452,7 @@
 
 </body>
 </html>
+
 
 
 
