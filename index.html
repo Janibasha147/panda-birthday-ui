@@ -173,7 +173,15 @@
     <div class="falling-container" id="fallingContainer"></div>
     <div class="birthday-message" id="birthdayMessage" style="display:none;">
 <h1>Happy Birthday, Panda! 🐼🎂</h1>
+<p><h1>Happy Birthday, Panda! 🐼🎂</h1>
 <p>Wishing you a day filled with joy, surprises, and unforgettable memories! 🎉💖</p>
+</div>
+</div>
+<div class="final-msg" id="finalMsg" style="display:none;">
+  "May your heart be as full as your cake and your year as sweet as your smile."
+  <span class="heart">🎂💫</span>
+  <span class="quote">— You truly make the world brighter, just by being in it.</span>
+</div>! 🎉💖</p>
 </div>
 </div>
 <div class="final-msg" id="finalMsg" style="display:none;">
@@ -254,28 +262,29 @@
           document.getElementById('mainMsg').style.display='none';
           document.getElementById('typingArea').style.display='block';
           runTypingAnimation();
-        },400);
+        },600);
       }
       function runTypingAnimation(){
         const msg = `
 <b>based on historical records, these are all the disasters that happend on 8th August.</b><br>
 <br>
+
 <b>Natural Disasters</b><br>
-<span style="color:#d14d72;">&#8226;</span> <b>2023 Maui Wildfires (USA)</b>: Major wildfires hit Maui on August 8, 2023.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>2010 Gansu Mudslide (China)</b>: A deadly mudslide struck Gansu province on August 8, 2010.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>1993 Guam Earthquake</b>: A 7.8 magnitude quake hit Guam on August 8, 1993.<br>
-<span style="color:#d14d72;">&#8226;</span> <b>1975 Banqiao Dam Collapse (China)</b>: Typhoon Nina caused massive dam failures on August 8, 1975.<br>
+<span style="color:#d14d72;">&#8226;</span> Maui wildfires in Hawaii (2023)<br>
+<span style="color:#d14d72;">&#8226;</span> Deadly mudslide in China’s Gansu province (2010)<br>
+<span style="color:#d14d72;">&#8226;</span> Strong earthquake in Guam (1993)<br>
+<span style="color:#d14d72;">&#8226;</span> Dam collapse in China, caused by a typhoon (1975)<br>
 
-<br><b>Accidents & Disasters</b><br>
-<span style="color:#a844a2;">&#8226;</span> <b>2019 Russia Missile Blast</b>: A missile test caused an explosion and radiation spike on August 8, 2019.<br>
-<span style="color:#a844a2;">&#8226;</span> <b>2009 Hudson Collision (USA)</b>: A plane and helicopter crash killed 9 over the Hudson River on August 8, 2009.<br>
+<br><b>Accidents</b><br>
+<span style="color:#a844a2;">&#8226;</span> Missile explosion in Russia with a radiation leak (2019)<br>
+<span style="color:#a844a2;">&#8226;</span> Helicopter and plane crash over New York’s Hudson River (2009)<br>
 
-<br><b>Conflicts & Terror Attacks</b><br>
-<span style="color:#8a2be2;">&#8226;</span> <b>2016 Quetta Hospital Bombing (Pakistan)</b>: A suicide blast killed 70 on August 8, 2016.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>2013 Funeral Attack (Pakistan)</b>: A bombing at a police officer’s funeral occurred on August 8, 2013.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1998 Consulate Raid (Afghanistan)</b>: Taliban killed diplomats at the Iranian consulate on August 8, 1998.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1988 Myanmar Uprising</b>: Pro-democracy protests started on August 8, 1988.<br>
-<span style="color:#8a2be2;">&#8226;</span> <b>1945 Soviet War Declaration</b>: USSR declared war on Japan on August 8, 1945.<br>
+<br><b>Conflicts & Attacks</b><br>
+<span style="color:#8a2be2;">&#8226;</span> Hospital bombing in Pakistan (2016)<br>
+<span style="color:#8a2be2;">&#8226;</span> Bomb attack at a funeral in Pakistan (2013)<br>
+<span style="color:#8a2be2;">&#8226;</span> Taliban killed diplomats in Afghanistan (1998)<br>
+<span style="color:#8a2be2;">&#8226;</span> Big democracy protests in Myanmar begin (1988)<br>
+<span style="color:#8a2be2;">&#8226;</span> Soviet Union declared war on Japan (1945)<br>
         `;
         let i = 0, speed=19;
         const el=document.getElementById('typingArea');
@@ -440,5 +449,6 @@
 
 </body>
 </html>
+
 
 
